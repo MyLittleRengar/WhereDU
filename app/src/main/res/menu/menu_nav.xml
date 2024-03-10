@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/main_home"
+        android:enabled="true"
+        android:icon="@drawable/menu_home"
+        android:title="홈"/>
+
+    <item
+        android:id="@+id/main_promise"
+        android:enabled="true"
+        android:icon="@drawable/menu_promise"
+        android:title="약속"/>
+
+    <item
+        android:id="@+id/main_friend"
+        android:enabled="true"
+        android:icon="@drawable/menu_users"
+        android:title="친구 목록"/>
+
+    <item
+        android:id="@+id/main_mybaemin"
+        android:enabled="true"
+        android:icon="@drawable/menu_person"
+        android:title="마이페이지"/>
+
+</menu>
