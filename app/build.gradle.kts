@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.psi.psiUtil.canPlaceAfterSimpleNameEntry
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -44,7 +42,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.activity:activity-ktx:1.8.2")
+    //noinspection KtxExtensionAvailable,GradleDependency
     implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -61,4 +59,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     //CircleImageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    //kakao api
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(files("libs/libDaumMapAndroid.jar"))
 }
