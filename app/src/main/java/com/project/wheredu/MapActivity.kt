@@ -1,22 +1,30 @@
 package com.project.wheredu
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
 class MapActivity : AppCompatActivity() {
@@ -41,6 +49,16 @@ class MapActivity : AppCompatActivity() {
 
     private val accessFineLocation = 1000
 
+    private lateinit var lm: LocationManager
+    private var userNewLocation: Location? = null
+    private var uNowPosition: MapPoint? = null
+
+    private lateinit var bottomSheetPromiseInfoBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottomSheetFriendInfoBehavior: BottomSheetBehavior<LinearLayout>
+    private val friendInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheetFriendInfo) }
+    private val promiseInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheet_PromiseInfo) }
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -58,6 +76,20 @@ class MapActivity : AppCompatActivity() {
         fabPromiseLoc = findViewById(R.id.fabPromiseLoc)
         fabMyLoc = findViewById(R.id.fabMyLoc)
 
+        initEvent()
+
+        lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        uNowPosition = MapPoint.mapPointWithGeoCoord(userNewLocation?.latitude!!, userNewLocation?.longitude!!)
+
+        val marker = MapPOIItem()
+        marker.itemName = "현 위치"
+        marker.mapPoint = uNowPosition
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+        mapView.addPOIItem(marker)
+        mapView.setMapCenterPointAndZoomLevel(uNowPosition, 1, true)
+
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
 
@@ -65,9 +97,13 @@ class MapActivity : AppCompatActivity() {
             toggleFab()
         }
         fabFriendInfo.setOnClickListener {
+            bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             toggleFab()
         }
         fabPromiseInfo.setOnClickListener {
+            bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             toggleFab()
         }
         fabTouchDown.setOnClickListener {
@@ -185,14 +221,89 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun startTracking() {
+        val marker = MapPOIItem()
+        marker.tag = 0
+
         mapView.currentLocationTrackingMode =
             MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading
-        //TrackingModeOnWithoutHeading
-
-        //val compass = Kakao
+        mapView.setZoomLevel(3, true)
     }
 
     private fun stopTracking() {
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
     }
+
+    private fun initEvent() {
+        persistentBottomSheetFriendInfoEvent()
+        persistentBottomSheetPromiseInfoEvent()
+        fabFriendInfo.setOnClickListener {
+            bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        fabPromiseInfo.setOnClickListener {
+            bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun persistentBottomSheetFriendInfoEvent() {
+        bottomSheetFriendInfoBehavior = BottomSheetBehavior.from(friendInfoBehavior)
+        bottomSheetFriendInfoBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) {}
+            @SuppressLint("SwitchIntDef")
+            override fun onStateChanged(p0: View, newState: Int) {
+                val tag = "friendInfoBehaviorEEEEEEEEEEEE"
+                when(newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED-> {
+                        Log.d(tag, "onStateChanged: 접음")
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING-> {
+                        Log.d(tag, "onStateChanged: 드래그")
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED-> {
+                        Log.d(tag, "onStateChanged: 펼침")
+                    }
+                    BottomSheetBehavior.STATE_HIDDEN-> {
+                        Log.d(tag, "onStateChanged: 숨기기")
+                    }
+                    BottomSheetBehavior.STATE_SETTLING-> {
+                        Log.d(tag, "onStateChanged: 고정됨")
+                    }
+                }
+            }
+
+
+        })
+    }
+
+    private fun persistentBottomSheetPromiseInfoEvent() {
+        bottomSheetPromiseInfoBehavior = BottomSheetBehavior.from(promiseInfoBehavior)
+        bottomSheetPromiseInfoBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) {}
+            @SuppressLint("SwitchIntDef")
+            override fun onStateChanged(p0: View, newState: Int) {
+                val tag = "friendInfoBehaviorEEEEEEEEEEEE"
+                when(newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED-> {
+                        Log.d(tag, "onStateChanged: 접음")
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING-> {
+                        Log.d(tag, "onStateChanged: 드래그")
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED-> {
+                        Log.d(tag, "onStateChanged: 펼침")
+                    }
+                    BottomSheetBehavior.STATE_HIDDEN-> {
+                        Log.d(tag, "onStateChanged: 숨기기")
+                    }
+                    BottomSheetBehavior.STATE_SETTLING-> {
+                        Log.d(tag, "onStateChanged: 고정됨")
+                    }
+                }
+            }
+
+
+        })
+    }
+
 }

@@ -20,6 +20,7 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="49b6946888506ef36fcb6bf72bf6bb80" />
+
         <activity
             android:name=".RecommendStoreActivity"
             android:exported="false" />
@@ -55,6 +56,9 @@
             android:exported="false" />
         <activity
             android:name=".MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PromiseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

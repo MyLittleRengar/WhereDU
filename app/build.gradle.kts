@@ -62,4 +62,7 @@ dependencies {
     //kakao api
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/libDaumMapAndroid.jar"))
+    //Custom Calendar
+    implementation("com.github.prolificinteractive:material-calendarview:1.6.1")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
 }

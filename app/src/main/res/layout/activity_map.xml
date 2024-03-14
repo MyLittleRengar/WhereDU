@@ -1,143 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent">
+        android:orientation="vertical">
 
-        <net.daum.mf.map.api.MapView
-            android:id="@+id/mapView"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </net.daum.mf.map.api.MapView>
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
+            <net.daum.mf.map.api.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/currentLocBTN"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="시작"
-                tools:ignore="HardcodedText,TextContrastCheck" />
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <Button
-                android:id="@+id/currentLosBTN"
+                <Button
+                    android:id="@+id/currentLocBTN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시작"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+                <Button
+                    android:id="@+id/currentLosBTN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="중지"
+                    tools:ignore="HardcodedText,TextContrastCheck" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="중지"
-                tools:ignore="HardcodedText,TextContrastCheck" />
-        </LinearLayout>
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="20dp"
-            android:orientation="vertical">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabPromiseLoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/pin"
+                    app:tint="#86B0C6"
+                    tools:ignore="ContentDescription" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabPromiseLoc"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabMyLoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/menu_users"
+                    app:tint="#86B0C6"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabMain2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#86B0C6"
+                    android:clickable="true"
+                    app:elevation="0dp"
+                    app:srcCompat="@drawable/navigation"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/pin"
-                app:tint="#86B0C6"
-                tools:ignore="ContentDescription" />
+                android:layout_gravity="end|bottom"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabMyLoc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/menu_users"
-                app:tint="#86B0C6"
-                tools:ignore="ContentDescription" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabTouchDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/hand"
+                    app:tint="#C69286"
+                    tools:ignore="ContentDescription" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabMain2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#86B0C6"
-                android:clickable="true"
-                app:elevation="0dp"
-                app:srcCompat="@drawable/navigation"
-                app:tint="@color/white"
-                tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
-        </LinearLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabFriendInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/friends"
+                    app:tint="#C69286"
+                    tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:orientation="vertical"
-            android:padding="20dp">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabPromiseInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:visibility="invisible"
+                    app:srcCompat="@drawable/list"
+                    app:tint="#C69286"
+                    tools:ignore="ContentDescription" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabTouchDown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/hand"
-                app:tint="#C69286"
-                tools:ignore="ContentDescription" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#C69286"
+                    android:clickable="true"
+                    app:elevation="0dp"
+                    app:srcCompat="@drawable/add"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+            </LinearLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabFriendInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/friends"
-                app:tint="#C69286"
-                tools:ignore="ContentDescription" />
+        </FrameLayout>
+    </LinearLayout>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabPromiseInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/list"
-                app:tint="#C69286"
-                tools:ignore="ContentDescription" />
+    <include
+        layout="@layout/map_bottomsheet_friendinfo"/>
+    <include
+        layout="@layout/map_bottomsheet_promiseinfo"/>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabMain"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#C69286"
-                android:clickable="true"
-                app:elevation="0dp"
-                app:srcCompat="@drawable/add"
-                app:tint="@color/white"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-        </LinearLayout>
-
-    </FrameLayout>
-
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
