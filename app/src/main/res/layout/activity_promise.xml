@@ -8,13 +8,76 @@
     android:background="@color/white"
     tools:context=".PromiseActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_toolbar"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_bold"
+                android:text="약속 일정"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/promiseAddIv"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="end|center"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/add_button"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/promiseCalendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:mcv_showOtherDates="other_months"
+        app:mcv_selectionMode="single"
         app:mcv_tileSize="50dp"
+        app:mcv_selectionColor="@color/DUGreen"
+        app:mcv_rightArrowMask="@drawable/cal_next"
+        app:mcv_leftArrowMask="@drawable/cal_back"
+        app:mcv_arrowColor="@color/DUGreen"
         app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
         app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"/>
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="?android:attr/listDivider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/promise_ListRV"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        tools:listitem="@layout/promise_list_item"/>
 
 </LinearLayout>
