@@ -41,6 +41,7 @@
                 android:layout_gravity="end"
                 app:srcCompat="@drawable/right_green_arrow"
                 tools:ignore="ContentDescription" />
+
         </LinearLayout>
 
         <FrameLayout
@@ -91,7 +92,16 @@
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:text="약속 시간" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="end|center_vertical"
+                app:srcCompat="@drawable/delete"
+                tools:ignore="ContentDescription" />
         </FrameLayout>
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
