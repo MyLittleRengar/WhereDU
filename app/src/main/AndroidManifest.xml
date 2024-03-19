@@ -56,22 +56,22 @@
             android:name=".PastListActivity"
             android:exported="false" />
         <activity
-            android:name=".FindPasswordActivity"
+            android:name=".login.FindPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Register2Activity"
+            android:name=".login.Register2Activity"
             android:exported="false" />
         <activity
-            android:name=".Register1Activity"
+            android:name=".login.Register1Activity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".PromiseActivity"
             android:exported="false" />
         <activity
             android:name=".MapActivity"
             android:exported="false" />
         <activity
-            android:name=".PromiseActivity"
+            android:name=".login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

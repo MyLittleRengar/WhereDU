@@ -21,7 +21,8 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/textView1"
@@ -31,7 +32,8 @@
                 android:text="친구목록"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck" />
 
             <View
                 android:layout_width="0dp"
@@ -44,7 +46,8 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end|center"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/add" />
+                android:src="@drawable/add"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
 
         </LinearLayout>
 
@@ -52,7 +55,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider4"
+        android:id="@+id/divider124"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="5dp"
@@ -70,7 +73,8 @@
         android:inputType="text"
         android:minHeight="48dp"
         android:padding="10dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:ignore="Autofill,HardcodedText,TextContrastCheck" />
 
     <View
         android:id="@+id/divider4"
@@ -106,7 +110,8 @@
                     android:text="내 프로필"
                     android:textColor="#A5A5A5"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -149,7 +154,8 @@
                     android:text="즐겨찾기"
                     android:textColor="#A5A5A5"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/friendsBookmarkRV"
@@ -205,7 +211,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
 
                 <TextView
                     android:id="@+id/textView11"

@@ -1,6 +1,5 @@
 package com.project.wheredu
 
-import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -12,6 +11,12 @@ interface ApiService {
     fun requestLogin(
         @Field("userId") userId: String,
         @Field("userPw") userPw: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/idCheck")
+    fun idCheck(
+        @Field("userId") userId: String
     ): Call<String>
 
     @FormUrlEncoded

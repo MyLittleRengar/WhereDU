@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="15dp"
-    tools:context=".Register1Activity">
+    tools:context=".login.Register1Activity">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -17,14 +17,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start"
-                app:srcCompat="@drawable/left_arrow" />
+                app:srcCompat="@drawable/left_arrow"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -76,7 +78,9 @@
                     android:ems="10"
                     android:hint="아이디"
                     android:inputType="text"
-                    android:padding="10dp" />
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    tools:ignore="Autofill,DuplicateSpeakableTextCheck,ObsoleteLayoutParam,TextContrastCheck" />
 
                 <ImageView
                     android:id="@+id/nicknameCheckedIV"
@@ -85,7 +89,8 @@
                     android:layout_gravity="center|end"
                     android:visibility="invisible"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/checked" />
+                    app:srcCompat="@drawable/checked"
+                    tools:ignore="ContentDescription" />
             </FrameLayout>
 
             <View
@@ -102,7 +107,8 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_weight="0"
-                android:text="중복확인" />
+                android:text="중복확인"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 
@@ -136,7 +142,8 @@
                 android:ems="10"
                 android:hint="비밀번호"
                 android:inputType="textPassword"
-                android:padding="10dp" />
+                android:padding="10dp"
+                tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,VisualLintTextFieldSize,TouchTargetSizeCheck" />
 
         </LinearLayout>
     </LinearLayout>
@@ -171,7 +178,8 @@
                 android:ems="10"
                 android:hint="비밀번호"
                 android:inputType="textPassword"
-                android:padding="10dp" />
+                android:padding="10dp"
+                tools:ignore="Autofill,TextContrastCheck,VisualLintTextFieldSize,TouchTargetSizeCheck" />
 
         </LinearLayout>
     </LinearLayout>
@@ -190,6 +198,7 @@
         android:textSize="20sp"
         android:text="다음"
         android:textColor="@color/white"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

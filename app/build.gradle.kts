@@ -1,7 +1,13 @@
+import java.io.*
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+val properties = Properties()
+properties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace = "com.project.wheredu"
@@ -15,6 +21,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //buildConfigField "String", "SERVER_IP", properties['api.serverip']
+        buildConfigField("String", "SERVER_IP", "${properties["api.serverip"]}")
     }
 
     buildTypes {
@@ -32,6 +41,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
     }
 }
 
