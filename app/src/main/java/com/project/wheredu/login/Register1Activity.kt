@@ -34,7 +34,7 @@ class Register1Activity : AppCompatActivity() {
         registerPWCheckEt = findViewById(R.id.registerPasswordCheckET)
         registerNicknameCheckBtn = findViewById(R.id.registerIdCheckedBTN)
         registerNextBtn = findViewById(R.id.registerNextBTN)
-        nicknameCheckedIv = findViewById(R.id.nicknameCheckedIV)
+        nicknameCheckedIv = findViewById(R.id.idCheckedIV)
 
         registerNicknameCheckBtn.setOnClickListener {
             val idText = registerIDEt.text.toString()
@@ -48,6 +48,8 @@ class Register1Activity : AppCompatActivity() {
                                 if(result == "pass") {
                                     idCheck = true
                                     nicknameCheckedIv.visibility = View.VISIBLE
+                                    registerIDEt.isEnabled = false
+                                    registerNicknameCheckBtn.isEnabled = false
                                 }
                                 if(result == "idFail"){
                                     Toast.makeText(this@Register1Activity,"이미 중복된 아이디가 있습니다", Toast.LENGTH_SHORT).show()
@@ -97,7 +99,7 @@ class Register1Activity : AppCompatActivity() {
                 }
             }
             else {
-                Toast.makeText(this@Register1Activity, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Register1Activity, "아이디 중복확인을 해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
     }

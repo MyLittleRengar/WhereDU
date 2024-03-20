@@ -88,12 +88,74 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <DatePicker
-                android:id="@+id/registerBirthDP"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:calendarViewShown="false"
-                android:datePickerMode="spinner" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/findBirthYearET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/et_custom"
+                    android:ems="10"
+                    android:hint="년도"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    tools:ignore="Autofill,TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/textView38"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_round_eb"
+                    android:textSize="18sp"
+                    android:text="년" />
+
+                <EditText
+                    android:id="@+id/findBirthMonthET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/et_custom"
+                    android:ems="10"
+                    android:hint="월"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/textView39"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_round_eb"
+                    android:textSize="18sp"
+                    android:text="월" />
+
+                <EditText
+                    android:id="@+id/findBirthDateET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/et_custom"
+                    android:ems="10"
+                    android:hint="일"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TextFields,TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/textView40"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_round_eb"
+                    android:textSize="18sp"
+                    android:text="일" />
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

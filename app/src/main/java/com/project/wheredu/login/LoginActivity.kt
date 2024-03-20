@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.project.wheredu.MainActivity
 import com.project.wheredu.R
 import com.project.wheredu.Service
@@ -55,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                                 if(result == "pass") {
                                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(intent)
-                                    finish()
+                                    ActivityCompat.finishAffinity(this@LoginActivity)
                                 }
                                 if(result == "pwFail") {
                                     Toast.makeText(this@LoginActivity,"비밀번호가 틀립니다", Toast.LENGTH_SHORT).show()

@@ -83,7 +83,7 @@
                     tools:ignore="Autofill,DuplicateSpeakableTextCheck,ObsoleteLayoutParam,TextContrastCheck" />
 
                 <ImageView
-                    android:id="@+id/nicknameCheckedIV"
+                    android:id="@+id/idCheckedIV"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center|end"

@@ -20,6 +20,12 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
+    @POST("/app/nicknameCheck")
+    fun nicknameCheck(
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
+    @FormUrlEncoded
     @POST("/app/contest")
     fun requestConnect(
         @Field("connectTest") conText: String
@@ -50,10 +56,11 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/addUser")
     fun addUser(
-        @Field("addName") addName: String,
         @Field("addId") addId: String,
         @Field("addPw") addPw: String,
-        @Field("addEmail") addEmail: String
+        @Field("addNickname") addNickname: String,
+        @Field("addGender") addGender: String,
+        @Field("addBirth") addBirth: String
     ): Call<String>
 
     @FormUrlEncoded

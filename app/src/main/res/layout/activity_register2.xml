@@ -133,34 +133,39 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
+            <RadioGroup
+                android:id="@+id/registerGenderRG"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/registerBoyBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:background="@drawable/et_custom"
-                android:text="남"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                tools:ignore="DuplicateIds,HardcodedText,VisualLintButtonSize" />
+                <RadioButton
+                    android:id="@+id/registerBoyRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:text="남자" />
 
-            <View
-                android:layout_width="30dp"
-                android:layout_height="0dp"/>
+                <RadioButton
+                    android:id="@+id/registerGirlRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:layout_marginStart="20dp"
+                    android:text="여자" />
+            </RadioGroup>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/registerGirlBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:background="@drawable/et_custom"
-                android:text="여"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                tools:ignore="DuplicateIds,VisualLintButtonSize" />
         </LinearLayout>
     </LinearLayout>
 
