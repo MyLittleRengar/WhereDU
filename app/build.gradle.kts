@@ -79,4 +79,7 @@ dependencies {
     //Custom Calendar
     implementation("com.github.prolificinteractive:material-calendarview:1.6.1")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
+    //Image Crop
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.14.1")
 }

@@ -19,7 +19,8 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_gravity="start"
-            app:srcCompat="@drawable/green_x_icon" />
+            app:srcCompat="@drawable/green_x_icon"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
 
     </LinearLayout>
 
@@ -32,9 +33,21 @@
             android:id="@+id/friends_profileIV"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:layout_marginTop="200dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/free" />
+            android:layout_marginTop="200dp"
+            android:src="@drawable/free"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/friends_UsernameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nanum_square_round_eb"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="유저 이름" />
 
         <View
             android:layout_width="0dp"
@@ -53,13 +66,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/friendsInfoBookmarkIV"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    app:srcCompat="@drawable/empty_star" />
+                    app:srcCompat="@drawable/empty_star"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -82,14 +97,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:id="@+id/friendsInfoDeleteIV"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_gravity="center_vertical"
-                    app:srcCompat="@drawable/recycle_bin" />
+                    app:srcCompat="@drawable/recycle_bin"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/textView17"
@@ -105,6 +122,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

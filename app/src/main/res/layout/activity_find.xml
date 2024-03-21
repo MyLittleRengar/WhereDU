@@ -21,7 +21,7 @@
             tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/findBackIV"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start"
@@ -102,6 +102,7 @@
                     android:background="@drawable/et_custom"
                     android:ems="10"
                     android:hint="년도"
+                    android:maxLength="4"
                     android:inputType="text"
                     android:padding="10dp"
                     tools:ignore="Autofill,TextContrastCheck,TouchTargetSizeCheck" />
@@ -123,6 +124,7 @@
                     android:background="@drawable/et_custom"
                     android:ems="10"
                     android:hint="월"
+                    android:maxLength="2"
                     android:inputType="text"
                     android:padding="10dp"
                     tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
@@ -144,6 +146,7 @@
                     android:background="@drawable/et_custom"
                     android:ems="10"
                     android:hint="일"
+                    android:maxLength="2"
                     android:inputType="text"
                     android:padding="10dp"
                     tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TextFields,TouchTargetSizeCheck" />
