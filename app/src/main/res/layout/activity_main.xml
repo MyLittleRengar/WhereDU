@@ -41,7 +41,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="end"
-                android:src="@drawable/list" />
+                android:src="@drawable/list"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/promiseAddIv"
@@ -49,7 +50,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="end"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/add_button" />
+                android:src="@drawable/add_button"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -227,7 +229,8 @@
         app:itemIconSize="28dp"
         app:itemIconTint="@color/DUGreen"
         app:itemTextAppearanceActiveBoldEnabled="false"
-        app:labelVisibilityMode="unlabeled"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/DUGreen"
         app:menu="@menu/menu_nav" />
 
 </LinearLayout>

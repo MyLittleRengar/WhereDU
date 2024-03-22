@@ -70,6 +70,12 @@ interface ApiService {
         @Field("changePw") changePw: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/getUserData")
+    fun getUserData(
+        @Field("userId") userId: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

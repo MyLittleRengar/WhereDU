@@ -96,7 +96,7 @@
             <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_height="29dp"
                 android:layout_gravity="end|center_vertical"
                 app:srcCompat="@drawable/delete"
                 tools:ignore="ContentDescription" />

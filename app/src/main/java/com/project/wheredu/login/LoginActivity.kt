@@ -1,9 +1,12 @@
 package com.project.wheredu.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -23,8 +26,22 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBTN: Button
     private lateinit var registerTV: TextView
     private lateinit var findTV: TextView
+    private lateinit var autoLoginCb: CheckBox
+
+    private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     private val service = Service.getService()
+
+    override fun onStart() {
+        super.onStart()
+
+        if(autoLoginCb.isChecked) {
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            ActivityCompat.finishAffinity(this@LoginActivity)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +52,14 @@ class LoginActivity : AppCompatActivity() {
         loginBTN = findViewById(R.id.loginBTN)
         registerTV = findViewById(R.id.registerTV)
         findTV = findViewById(R.id.findTV)
+        autoLoginCb = findViewById(R.id.autoLoginCB)
+
+        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
+
+        val storeID = preferences.getString("userID", "")
+        if(storeID != "") {
+            autoLoginCb.isChecked = true
+        }
 
         registerTV.setOnClickListener {
             startActivity(Intent(this@LoginActivity, Register1Activity::class.java))
@@ -54,6 +79,16 @@ class LoginActivity : AppCompatActivity() {
                             try {
                                 val result = response.body()!!.toString()
                                 if(result == "pass") {
+                                    editor = preferences.edit()
+                                    editor.putString("accountID", idText)
+                                    editor.putString("accountPW", pwText)
+                                    editor.apply()
+                                    if(autoLoginCb.isChecked) {
+                                        editor.putString("userID", idText)
+                                        editor.putString("userPW", pwText)
+                                        editor.apply()
+                                    }
+
                                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(intent)
                                     ActivityCompat.finishAffinity(this@LoginActivity)

@@ -21,7 +21,8 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/textView1"
@@ -44,7 +45,8 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end|center"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/settings" />
+                android:src="@drawable/settings"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -52,6 +54,7 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/myPage_UserProfileImgIV"
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_gravity="center"
@@ -59,26 +62,26 @@
         android:src="@drawable/free"/>
 
     <TextView
-        android:id="@+id/myPage_UserNameTV"
+        android:id="@+id/myPage_UserNickNameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nanum_light"
+        android:fontFamily="@font/nanum_square_round_eb"
         android:layout_marginTop="40dp"
         android:textStyle="bold"
-        android:textSize="16sp"
+        android:textSize="21sp"
         android:textColor="@color/black"
-        android:text="사용자 이름" />
+        android:text="사용자 닉네임" />
 
     <TextView
-        android:id="@+id/myPage_UserNickNameTV"
+        android:id="@+id/myPage_UserIDTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:fontFamily="@font/nanum_light"
         android:textStyle="bold"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:text="사용자 닉네임" />
+        android:text="사용자 아이디" />
 
     <View
         android:id="@+id/divider2"
@@ -87,6 +90,7 @@
         android:background="?android:attr/listDivider" />
 
     <LinearLayout
+        android:id="@+id/myPageEventLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -114,10 +118,12 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/myPageNoticeLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -145,10 +151,12 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/myPageInquiryLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -176,7 +184,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <View
@@ -185,7 +194,7 @@
         android:layout_weight="1"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bottomNav"
+        android:id="@+id/myPage_bottomNav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="bottom"
@@ -193,7 +202,8 @@
         app:itemIconSize="28dp"
         app:itemIconTint="@color/DUGreen"
         app:itemTextAppearanceActiveBoldEnabled="false"
-        app:labelVisibilityMode="unlabeled"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/DUGreen"
         app:menu="@menu/menu_nav" />
 
 </LinearLayout>

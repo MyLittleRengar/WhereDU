@@ -237,7 +237,7 @@
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bottomNav"
+        android:id="@+id/friends_bottomNav"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="bottom"
@@ -245,7 +245,8 @@
         app:itemIconSize="28dp"
         app:itemIconTint="@color/DUGreen"
         app:itemTextAppearanceActiveBoldEnabled="false"
-        app:labelVisibilityMode="unlabeled"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/DUGreen"
         app:menu="@menu/menu_nav" >
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

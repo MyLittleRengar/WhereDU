@@ -17,14 +17,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/settingBackIV"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start"
-                app:srcCompat="@drawable/left_arrow" />
+                app:srcCompat="@drawable/left_arrow"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -55,15 +57,16 @@
             android:layout_weight="1"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/settingNotificationReceiveSW"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="48dp"
             android:layout_gravity="end"
             android:thumb="@drawable/thumb_selector"
-            app:track="@drawable/track_selector"
             app:showText="false"
             app:thumbTint="@color/white"
-            app:thumbTintMode="src_atop"
-            app:trackTint="@color/DUGreen"/>
+            app:track="@drawable/track_selector"
+            app:trackTint="@color/DUGreen"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
     </LinearLayout>
 
@@ -92,8 +95,9 @@
             android:layout_weight="1" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/settingLocationShareSW"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="48dp"
             android:layout_gravity="end"
             android:thumb="@drawable/thumb_selector"
             app:showText="false"
@@ -110,14 +114,15 @@
         android:background="#DADADA"/>
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/settingLogoutTV"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center"
         android:fontFamily="@font/nanum_bold"
+        android:gravity="center"
         android:text="로그아웃"
         android:textColor="#FF5656"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:ignore="TextContrastCheck" />
 
     <View
         android:layout_width="match_parent"
