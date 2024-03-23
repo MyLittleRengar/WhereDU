@@ -8,9 +8,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.project.wheredu.CustomDialog
 import com.project.wheredu.R
 import com.project.wheredu.Service
+import com.project.wheredu.dialog.CustomFindIdDialogAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,7 +67,14 @@ class FindActivity : AppCompatActivity() {
                                     val resultText = result.split("=")
                                     if (resultText[0] == "pass") {
                                         val dataBirth = resultText[1].split("/")
-                                        CustomDialog.CustomFindDialog(this@FindActivity, this@FindActivity, "아이디 찾기", "아이디: "+dataBirth[0])
+                                        val dlg = CustomFindIdDialogAdapter(this@FindActivity, dataBirth[0], this@FindActivity)
+                                        dlg.show()
+                                    }
+                                    else if(result == "birthFail") {
+                                        Toast.makeText(this@FindActivity, "생년월일이 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else if(result == "nickFail") {
+                                        Toast.makeText(this@FindActivity, "닉네임이 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                                     }
                                 } catch (e: IOException) {
                                     e.printStackTrace()
@@ -84,7 +91,7 @@ class FindActivity : AppCompatActivity() {
                     })
                 }
                 else {
-                    Toast.makeText(this@FindActivity, " 생년월일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FindActivity, "생년월일을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
             else {

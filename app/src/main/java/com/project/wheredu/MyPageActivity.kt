@@ -1,21 +1,33 @@
 package com.project.wheredu
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 class MyPageActivity : AppCompatActivity() {
@@ -32,6 +44,7 @@ class MyPageActivity : AppCompatActivity() {
 
     private lateinit var preferences: SharedPreferences
     private val service = Service.getService()
+    private var selectedImageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_page)
@@ -49,6 +62,10 @@ class MyPageActivity : AppCompatActivity() {
 
         val saveID = preferences.getString("accountID", "").toString()
         getUserData(saveID)
+
+        myPageUserProfileImgIv.setOnClickListener {
+            openGallery()
+        }
 
         myPageSettingIv.setOnClickListener {
             startActivity(Intent(this@MyPageActivity, SettingActivity::class.java))
@@ -92,6 +109,56 @@ class MyPageActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUri = data.data
+            myPageUserProfileImgIv.setImageURI(selectedImageUri)
+            selectedImageUri?.let { uri ->
+                val newUri = Uri.parse(getPathFromUri(uri))
+                uploadImage(newUri, myPageUserNicknameTv.text.toString())
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_PICK_IMAGE = 100
+    }
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun uploadImage(imageUri: Uri, userNickname: String) {
+        val file = imageUri.path?.let { File(it) }
+        val requestFile =
+            file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val body = requestFile?.let { MultipartBody.Part.createFormData("image", file.name, it) }
+
+        val usernameRequestBody = userNickname.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        GlobalScope.launch(Dispatchers.IO) {
+            body?.let { service.uploadImage(usernameRequestBody, it) }
+                ?.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("MyPageActivity", "Image upload failed: ${t.message}")
+                    }
+                })
+        }
+    }
+
+    private fun getPathFromUri(uri: Uri?): String {
+        val cursor = contentResolver.query(uri!!, null, null, null, null)
+        cursor!!.moveToNext()
+        val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+        cursor.close()
+        return path
     }
 
     private fun getUserData(userID: String) {

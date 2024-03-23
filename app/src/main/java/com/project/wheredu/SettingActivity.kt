@@ -25,13 +25,24 @@ class SettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
-        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
-        editor = preferences.edit()
-
         settingBackIv = findViewById(R.id.settingBackIV)
         settingNotificationReceiveSw = findViewById(R.id.settingNotificationReceiveSW)
         settingLocationShareSw = findViewById(R.id.settingLocationShareSW)
         settingLogoutTv = findViewById(R.id.settingLogoutTV)
+
+        settingNotificationReceiveSw.setOnCheckedChangeListener { _, onSwitch  ->
+            preferences = getSharedPreferences("Permission", Context.MODE_PRIVATE)
+            editor = preferences.edit()
+
+            editor.putBoolean("NotificationReceive", onSwitch)
+        }
+
+        settingLocationShareSw.setOnCheckedChangeListener { _, onSwitch ->
+            preferences = getSharedPreferences("Permission", Context.MODE_PRIVATE)
+            editor = preferences.edit()
+
+            editor.putBoolean("LocationShare", onSwitch)
+        }
 
         settingBackIv.setOnClickListener {
             startActivity(Intent(this@SettingActivity, MyPageActivity::class.java))
@@ -39,6 +50,8 @@ class SettingActivity : AppCompatActivity() {
         }
 
         settingLogoutTv.setOnClickListener {
+            preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
+            editor = preferences.edit()
             editor.putString("userID", "")
             editor.putString("userPW", "")
             editor.apply()

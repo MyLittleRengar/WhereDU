@@ -76,6 +76,13 @@ interface ApiService {
         @Field("userId") userId: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/friendAdd")
+    fun friendAdd(
+        @Field("userNickname") userNickname: String,
+        @Field("friendNickname") friendNickname: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

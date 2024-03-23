@@ -1,34 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="300dp"
-    android:layout_height="180dp"
-    android:background="@color/white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_dialog_background"
     android:gravity="center"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:minWidth="300dp">
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="5dp"
-        android:src="@drawable/information"/>
+        android:src="@drawable/information"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/nanum_square_round_eb"
+        android:text="아이디"
+        android:textSize="19sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/ctIdTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/nanum_light"
-        android:text=""
+        android:text="ㅁㅁㅁㅁ"
         android:textSize="16sp"
         android:textStyle="bold" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +46,7 @@
         android:padding="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button2"
+            android:id="@+id/findIdCancelBTN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/et_custom"
@@ -49,7 +57,7 @@
             android:layout_height="0dp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button3"
+            android:id="@+id/findIdPasswordChangeBTN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"

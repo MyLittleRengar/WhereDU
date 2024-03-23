@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="310dp"
     android:layout_height="250dp"
@@ -11,7 +12,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="5dp"
-        android:src="@drawable/information"/>
+        android:src="@drawable/information"
+        tools:ignore="ContentDescription" />
 
     <EditText
         android:id="@+id/findPasswordET"
@@ -20,10 +22,11 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/et_custom"
         android:ems="10"
-        android:hint="비밀번호"
+        android:hint="변경할 비밀번호"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:padding="10dp" />
+        android:padding="10dp"
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/findPasswordCheckET"
@@ -32,13 +35,14 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/et_custom"
         android:ems="10"
-        android:hint="비밀번호 확인"
+        android:hint="변경할 비밀번호 확인"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:padding="10dp" />
+        android:padding="10dp"
+        tools:ignore="Autofill" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button3"
+        android:id="@+id/changeAcceptBTN"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_greenbtn"

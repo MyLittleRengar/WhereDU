@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nanum_square_round_eb"
-        android:text="비밀변호 변경"
+        android:text="친구 추가"
         android:textColor="@color/black"
         android:textSize="19sp"
         android:textStyle="bold" />
@@ -23,46 +23,23 @@
         android:id="@+id/textView41"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/nanum_light"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:text="친구의 닉네임을 입력하세요" />
+
+    <EditText
+        android:id="@+id/friendAddET"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:fontFamily="@font/nanum_square_round_eb"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="변경할 비밀번호" />
-
-    <EditText
-        android:id="@+id/changePwET"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@drawable/et_custom"
         android:ems="10"
-        android:hint="변경할 비밀번호"
-        android:inputType="textPassword"
-        android:padding="7dp"
-        android:textSize="15sp"
-        tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
-
-    <TextView
-        android:id="@+id/textView42"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/nanum_square_round_eb"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="변경할 비밀번호 확인" />
-
-    <EditText
-        android:id="@+id/changePwCheckET"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/et_custom"
-        android:ems="10"
-        android:hint="변경할 비밀번호 확인"
-        android:inputType="textPassword"
+        android:hint="닉네임을 입력해주세요"
+        android:inputType="text"
         android:padding="7dp"
         android:textSize="15sp"
         tools:ignore="Autofill,DuplicateSpeakableTextCheck,TextContrastCheck,TouchTargetSizeCheck" />
@@ -75,26 +52,23 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/changeAcceptBTN"
+            android:id="@+id/changeCancelBTN"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="@drawable/round_btn"
-            android:backgroundTint="@color/blue"
-            android:text="확인"
-            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/et_custom"
+            android:text="취소"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/changeCancelBTN"
+            android:id="@+id/changeAcceptBTN"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="45dp"
             android:layout_weight="1"
-            android:background="@drawable/round_btn"
-            android:backgroundTint="@color/red"
-            android:text="취소"
+            android:background="@drawable/round_greenbtn"
             android:textColor="@color/white"
+            android:text="확인"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
     </LinearLayout>

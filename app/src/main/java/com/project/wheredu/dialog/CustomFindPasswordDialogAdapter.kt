@@ -1,28 +1,28 @@
-package com.project.wheredu
+package com.project.wheredu.dialog
 
 import android.app.Dialog
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.project.wheredu.databinding.CustomPasswordDialogBinding
+import com.project.wheredu.databinding.CustomFindPwBinding
 
 
-class CustomDialogAdapter(private val context : AppCompatActivity) {
+class CustomFindPasswordDialogAdapter(private val context : AppCompatActivity) {
 
     private lateinit var listener: CustomDialogAcceptButtonClick
-    private lateinit var binding : CustomPasswordDialogBinding
+    private lateinit var binding : CustomFindPwBinding
     private val dlg = Dialog(context)
 
     fun show() {
-        binding = CustomPasswordDialogBinding.inflate(context.layoutInflater)
+        binding = CustomFindPwBinding.inflate(context.layoutInflater)
 
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dlg.setContentView(binding.root)
         dlg.setCancelable(false)
 
         binding.changeAcceptBTN.setOnClickListener {
-            val changePwText = binding.changePwET.text.toString()
-            val changePwCheckText = binding.changePwCheckET.text.toString()
+            val changePwText = binding.findPasswordET.text.toString()
+            val changePwCheckText = binding.findPasswordCheckET.text.toString()
             if(changePwText.isNotBlank()){
                 if(changePwText == changePwCheckText) {
                     listener.onAcceptClick(changePwText)
@@ -34,10 +34,6 @@ class CustomDialogAdapter(private val context : AppCompatActivity) {
             else {
                 Toast.makeText(context, "변경할 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
-            dlg.dismiss()
-        }
-
-        binding.changeCancelBTN.setOnClickListener {
             dlg.dismiss()
         }
 

@@ -3,14 +3,13 @@ package com.project.wheredu.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.project.wheredu.CustomDialogAdapter
+import com.project.wheredu.dialog.CustomFindPasswordDialogAdapter
 import com.project.wheredu.R
 import com.project.wheredu.Service
 import retrofit2.Call
@@ -62,8 +61,7 @@ class FindPasswordActivity : AppCompatActivity() {
                                 try {
                                     val result = response.body()!!.toString()
                                     if(result == "pass") {
-                                        Log.e("EEEEEEE", result)
-                                        val dlg = CustomDialogAdapter(this@FindPasswordActivity)
+                                        val dlg = CustomFindPasswordDialogAdapter(this@FindPasswordActivity)
                                         dlg.setOnAcceptClickedListener { content ->
                                             sendData(content)
                                         }
