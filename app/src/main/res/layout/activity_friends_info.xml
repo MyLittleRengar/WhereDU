@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DDDDE1"
+    android:background="#E8E8E8"
     tools:context=".FriendsInfoActivity">
 
     <LinearLayout
@@ -31,21 +31,21 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/friends_profileIV"
-            android:layout_width="155dp"
-            android:layout_height="155dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="200dp"
             android:src="@drawable/free"
             tools:ignore="ImageContrastCheck" />
 
         <TextView
-            android:id="@+id/friends_UsernameTV"
+            android:id="@+id/friends_UserNicknameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:fontFamily="@font/nanum_square_round_eb"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             android:text="유저 이름" />
 

@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -14,6 +14,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -27,8 +29,10 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+
 
 class MyPageActivity : AppCompatActivity() {
 
@@ -113,25 +117,44 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+        pickImage.launch(intent)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            selectedImageUri = data.data
-            myPageUserProfileImgIv.setImageURI(selectedImageUri)
-            selectedImageUri?.let { uri ->
-                val newUri = Uri.parse(getPathFromUri(uri))
-                uploadImage(newUri, myPageUserNicknameTv.text.toString())
+    private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val imageUri: Uri? = result.data?.data
+            imageUri?.let { uri ->
+                startCropActivity(uri)
             }
         }
     }
 
-    companion object {
-        private const val REQUEST_PICK_IMAGE = 100
+    private fun startCropActivity(uri: Uri) {
+        val cropIntent = Intent("com.android.camera.action.CROP")
+        cropIntent.setDataAndType(uri, "image/*")
+        cropIntent.putExtra("crop", "true")
+        cropIntent.putExtra("aspectX", 1)
+        cropIntent.putExtra("aspectY", 1)
+        cropIntent.putExtra("outputX", 256)
+        cropIntent.putExtra("outputY", 256)
+        cropIntent.putExtra("return-data", true)
+        cropActivityResult.launch(cropIntent)
     }
+
+    private val cropActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val croppedImage = result.data?.extras?.getParcelable<Bitmap>("data")
+            croppedImage?.let {
+                myPageUserProfileImgIv.setImageBitmap(it)
+                selectedImageUri = getImageUri(this@MyPageActivity, it)
+                selectedImageUri?.let { uri ->
+                    val newUri = Uri.parse(getPathFromUri(uri))
+                    uploadImage(newUri, myPageUserNicknameTv.text.toString())
+                }
+            }
+        }
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     private fun uploadImage(imageUri: Uri, userNickname: String) {
         val file = imageUri.path?.let { File(it) }
@@ -159,6 +182,14 @@ class MyPageActivity : AppCompatActivity() {
         val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
         cursor.close()
         return path
+    }
+
+    private fun getImageUri(context: Context, inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
     }
 
     private fun getUserData(userID: String) {

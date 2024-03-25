@@ -1,8 +1,10 @@
 package com.project.wheredu
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,8 +12,12 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.dialog.CustomFriendAddDialogAdapter
+import com.project.wheredu.recycler.FriendItem
+import com.project.wheredu.recycler.FriendListAdapter
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,9 +29,13 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var friendsAddIv: ImageView
     private lateinit var friendUserProfileIv: ImageView
     private lateinit var friendUserNicknameTv: TextView
+    private lateinit var friendsListRv: RecyclerView
     private lateinit var friendsBottomNav: BottomNavigationView
 
     private lateinit var preferences: SharedPreferences
+
+    private var datas = mutableListOf<FriendItem>()
+    private lateinit var friendAdapter: FriendListAdapter
 
     private val service = Service.getService()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,19 +45,28 @@ class FriendsActivity : AppCompatActivity() {
         friendUserProfileIv = findViewById(R.id.friendUserProfileIV)
         friendUserNicknameTv = findViewById(R.id.friendUserNicknameTV)
         friendsAddIv = findViewById(R.id.friendsAddIv)
+        friendsListRv = findViewById(R.id.friendsListRV)
         friendsBottomNav = findViewById(R.id.friends_bottomNav)
 
         preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
-        val storeID = preferences.getString("accountID", "").toString()
-        returnNickname2(storeID)
+        val storeNick = preferences.getString("accountNickname", "").toString()
+        friendUserNicknameTv.text = storeNick
+        downloadImage(storeNick)
+        friendListDataCount(storeNick)
 
         friendsAddIv.setOnClickListener {
             val dlg = CustomFriendAddDialogAdapter(this@FriendsActivity)
             dlg.setOnAcceptClickedListener { friendNickname ->
-                returnNickname(storeID, friendNickname)
+                if(storeNick != friendNickname) {
+                    friendAdd(storeNick, friendNickname)
+                }
+                else {
+                    Toast.makeText(this@FriendsActivity, "자기 자신은 영원한 친구입니다", Toast.LENGTH_SHORT).show()
+                }
             }
             dlg.show()
         }
+
 
         friendsBottomNav.setOnItemSelectedListener { item ->
             when(item.itemId) {
@@ -73,15 +92,25 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
-    private fun returnNickname2(userID: String) {
-        val callPost = service.getUserData(userID)
-        callPost.enqueue(object: Callback<String?> {
+    private fun loopInt(data: Int, userNickname:String) {
+        Log.e("FriendsActivity", "loopInt")
+        for(i in 0 until data) {
+            friendListData(userNickname, i)
+            if(i == 0) {
+                datas.clear()
+            }
+        }
+    }
+
+    private fun friendListDataCount(userNickname: String) {
+        val callPost = service.returnFriendCount(userNickname)
+        callPost.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {
                     try {
-                        val result = response.body()!!.toString()
-                        friendUserNicknameTv.text = result
-                        downloadImage(result)
+                        val result = response.body()!!.toInt()
+                        loopInt(result, userNickname)
+                        Log.e("FriendsActivity", "friendListDataCount")
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -91,7 +120,6 @@ class FriendsActivity : AppCompatActivity() {
                     Toast.makeText(this@FriendsActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<String?>, t: Throwable) {
                 Toast.makeText(this@FriendsActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
@@ -99,19 +127,14 @@ class FriendsActivity : AppCompatActivity() {
         })
     }
 
-    private fun returnNickname(userID: String, friendNickname: String) {
-        val callPost = service.getUserData(userID)
-        callPost.enqueue(object: Callback<String?> {
+    private fun friendListData(userNickname: String, userInt: Int) {
+        val callPost = service.friendListData(userNickname, userInt)
+        callPost.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {
                     try {
                         val result = response.body()!!.toString()
-                        if(result != friendNickname) {
-                            friendAdd(result, friendNickname)
-                        }
-                        else {
-                            Toast.makeText(this@FriendsActivity, "자기 자신은 영원한 친구입니다", Toast.LENGTH_SHORT).show()
-                        }
+                        downloadImage2(result)
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -121,12 +144,45 @@ class FriendsActivity : AppCompatActivity() {
                     Toast.makeText(this@FriendsActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<String?>, t: Throwable) {
                 Toast.makeText(this@FriendsActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
 
         })
+    }
+
+    private fun downloadImage2(userNickname: String) {
+        val call = service.downloadImage(userNickname)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val imageBytes = response.body()?.bytes()
+                    imageBytes?.let {
+                        val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                        initRecycler(bitmap, userNickname)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("MyPageActivity", "Image download failed: ${t.message}")
+            }
+        })
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun initRecycler(img: Bitmap, nickname: String) {
+        friendAdapter = FriendListAdapter(this)
+        friendsListRv.adapter = friendAdapter
+
+        Log.e("FriendsActivity", "initRecycler")
+        datas.apply {
+            add(FriendItem(img, nickname))
+        }
+        friendsListRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        friendsListRv.setHasFixedSize(true)
+        datas.sortBy { it.nickname }
+        friendAdapter.datas = datas
+        friendAdapter.notifyDataSetChanged()
     }
 
     private fun downloadImage(userNickname: String) {

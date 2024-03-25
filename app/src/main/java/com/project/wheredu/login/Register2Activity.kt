@@ -1,7 +1,9 @@
 package com.project.wheredu.login
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.DatePicker
@@ -13,9 +15,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.project.wheredu.R
 import com.project.wheredu.Service
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -66,6 +77,7 @@ class Register2Activity : AppCompatActivity() {
                                     try {
                                         val result = response.body()!!.toString()
                                         if (result == "pass") {
+                                            uploadImage(userNickname)
                                             Toast.makeText(this@Register2Activity, userNickname+"님 회원가입을 축하합니다.", Toast.LENGTH_SHORT).show()
                                             startActivity(Intent(this@Register2Activity, LoginActivity::class.java))
                                             ActivityCompat.finishAffinity(this@Register2Activity)
@@ -140,6 +152,28 @@ class Register2Activity : AppCompatActivity() {
                 R.id.registerBoyRB -> userGender = "1"
                 R.id.registerGirlRB -> userGender = "0"
             }
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun uploadImage(userNickname: String) {
+        val imageUri = Uri.parse("android.resource://$packageName/${R.drawable.free}")
+        val file = imageUri.path?.let { File(it) }
+        val requestFile =
+            file?.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val body = requestFile?.let { MultipartBody.Part.createFormData("image", file.name, it) }
+
+        val usernameRequestBody = userNickname.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        GlobalScope.launch(Dispatchers.IO) {
+            body?.let { service.uploadImage(usernameRequestBody, it) }
+                ?.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {}
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("MyPageActivity", "Image upload failed: ${t.message}")
+                    }
+                })
         }
     }
 }

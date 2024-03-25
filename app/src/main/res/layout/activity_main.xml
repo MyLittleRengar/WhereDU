@@ -128,7 +128,7 @@
                             android:fontFamily="@font/nanum_bold"
                             android:text="약속장소와 가까운 음식점"
                             android:textColor="@color/black"
-                            android:textSize="24sp"
+                            android:textSize="21sp"
                             android:textStyle="bold" />
 
                         <View
@@ -183,7 +183,7 @@
                             android:fontFamily="@font/nanum_bold"
                             android:text="이런 카페는 어때요?"
                             android:textColor="@color/black"
-                            android:textSize="24sp"
+                            android:textSize="21sp"
                             android:textStyle="bold" />
 
                         <View
