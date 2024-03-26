@@ -8,7 +8,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,6 +35,9 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var friendUserProfileIv: ImageView
     private lateinit var friendUserNicknameTv: TextView
     private lateinit var friendsListRv: RecyclerView
+    private lateinit var friendSearchTextEt: EditText
+    private lateinit var friendSearchBtn: Button
+    private lateinit var friendSearchClearIv: ImageView
     private lateinit var friendsBottomNav: BottomNavigationView
 
     private lateinit var preferences: SharedPreferences
@@ -38,6 +46,13 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var friendAdapter: FriendListAdapter
 
     private val service = Service.getService()
+
+    private lateinit var storeNick: String
+    override fun onRestart() {
+        super.onRestart()
+        datas.clear()
+        friendListDataCount(storeNick)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
@@ -46,13 +61,43 @@ class FriendsActivity : AppCompatActivity() {
         friendUserNicknameTv = findViewById(R.id.friendUserNicknameTV)
         friendsAddIv = findViewById(R.id.friendsAddIv)
         friendsListRv = findViewById(R.id.friendsListRV)
+        friendSearchTextEt = findViewById(R.id.friendSearchTextET)
+        friendSearchBtn = findViewById(R.id.friendSearchBTN)
+        friendSearchClearIv = findViewById(R.id.friendSearchClearIV)
         friendsBottomNav = findViewById(R.id.friends_bottomNav)
 
         preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
-        val storeNick = preferences.getString("accountNickname", "").toString()
+        storeNick = preferences.getString("accountNickname", "").toString()
         friendUserNicknameTv.text = storeNick
         downloadImage(storeNick)
         friendListDataCount(storeNick)
+
+        friendSearchClearIv.setOnClickListener {
+            if(friendSearchClearIv.visibility == View.VISIBLE) {
+                friendSearchTextEt.text.clear()
+                friendSearchClearIv.visibility = View.INVISIBLE
+            }
+        }
+
+        friendSearchTextEt.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun afterTextChanged(p0: Editable?) {
+                if(friendSearchTextEt.text.isNotBlank()) {
+                    friendSearchClearIv.visibility = View.VISIBLE
+                }
+                else if(friendSearchTextEt.text.isBlank()) {
+                    friendSearchClearIv.visibility = View.INVISIBLE
+                    datas.clear()
+                    friendAdapter.notifyDataSetChanged()
+                    friendListDataCount(storeNick)
+                }
+            }
+
+        })
 
         friendsAddIv.setOnClickListener {
             val dlg = CustomFriendAddDialogAdapter(this@FriendsActivity)
@@ -67,6 +112,9 @@ class FriendsActivity : AppCompatActivity() {
             dlg.show()
         }
 
+        friendSearchBtn.setOnClickListener {
+            textSearch(storeNick)
+        }
 
         friendsBottomNav.setOnItemSelectedListener { item ->
             when(item.itemId) {
@@ -92,8 +140,46 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    private fun textSearch(userNickname: String) {
+        val searchText = friendSearchTextEt.text.toString()
+        val callPost = service.searchText(searchText, userNickname)
+        callPost.enqueue(object: Callback<String?> {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        if(result == "NoData") {
+                            datas.clear()
+                            friendAdapter.notifyDataSetChanged()
+                        }
+                        else{
+                            textReplace(result, userNickname)
+                        }
+
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@FriendsActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@FriendsActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun textReplace(text: String, userNickname: String) {
+        val textReplace = text.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
+            .replace("friendNickname:","").replace("ownerNickname:","")
+        val textSplit = textReplace.split(",")
+        loopInt(textSplit.size, userNickname)
+    }
+
     private fun loopInt(data: Int, userNickname:String) {
-        Log.e("FriendsActivity", "loopInt")
         for(i in 0 until data) {
             friendListData(userNickname, i)
             if(i == 0) {
@@ -110,7 +196,6 @@ class FriendsActivity : AppCompatActivity() {
                     try {
                         val result = response.body()!!.toInt()
                         loopInt(result, userNickname)
-                        Log.e("FriendsActivity", "friendListDataCount")
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -174,7 +259,6 @@ class FriendsActivity : AppCompatActivity() {
         friendAdapter = FriendListAdapter(this)
         friendsListRv.adapter = friendAdapter
 
-        Log.e("FriendsActivity", "initRecycler")
         datas.apply {
             add(FriendItem(img, nickname))
         }

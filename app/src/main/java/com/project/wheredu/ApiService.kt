@@ -96,6 +96,20 @@ interface ApiService {
         @Field("friendInt") friendInt: Int
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/searchText")
+    fun searchText(
+        @Field("searchText") searchText: String,
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/friendDelete")
+    fun friendDelete(
+        @Field("friendNickname") friendNickname: String,
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(
