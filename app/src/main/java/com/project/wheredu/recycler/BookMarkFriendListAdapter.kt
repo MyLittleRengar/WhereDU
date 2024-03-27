@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.project.wheredu.FriendsInfoActivity
 import com.project.wheredu.R
 
-class FriendListAdapter(val context: Context): RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class BookMarkFriendListAdapter(val context: Context): RecyclerView.Adapter<BookMarkFriendListAdapter.ViewHolder>() {
 
     var datas = mutableListOf<FriendItem>()
 
@@ -38,7 +38,7 @@ class FriendListAdapter(val context: Context): RecyclerView.Adapter<FriendListAd
             itemView.setOnClickListener {
                 val intent = Intent(context, FriendsInfoActivity::class.java)
                 intent.putExtra("userNick", item.nickname)
-                intent.putExtra("userBookmark", false)
+                intent.putExtra("userBookmark", true)
                 context.startActivity(intent)
             }
         }

@@ -90,6 +90,19 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
+    @POST("/app/returnBookMarkFriendCount")
+    fun returnBookMarkFriendCount(
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/bookmarkFriendListData")
+    fun bookmarkFriendListData(
+        @Field("userNickname") userNickname: String,
+        @Field("friendInt") friendInt: Int
+    ): Call<String>
+
+    @FormUrlEncoded
     @POST("/app/friendListData")
     fun friendListData(
         @Field("userNickname") userNickname: String,
@@ -106,6 +119,14 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/friendDelete")
     fun friendDelete(
+        @Field("friendNickname") friendNickname: String,
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/friendBookMarkChange")
+    fun friendBookMarkChange(
+        @Field("check") check: Boolean,
         @Field("friendNickname") friendNickname: String,
         @Field("userNickname") userNickname: String
     ): Call<String>

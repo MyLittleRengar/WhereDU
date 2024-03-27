@@ -29,6 +29,8 @@ class FriendsInfoActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
     private val service = Service.getService()
 
+    private var userBookMarkBoolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends_info)
@@ -43,6 +45,11 @@ class FriendsInfoActivity : AppCompatActivity() {
 
         val intent = intent
         val userNick = intent.getStringExtra("userNick")
+        userBookMarkBoolean = intent.getBooleanExtra("userBookmark", false)
+
+        if(userBookMarkBoolean) {
+            friendsInfoBookmarkIv.setImageResource(R.drawable.full_star)
+        }
 
         friendsUserNicknameTv.text = userNick
         getUserProfile(userNick!!)
@@ -52,7 +59,15 @@ class FriendsInfoActivity : AppCompatActivity() {
         }
 
         friendsInfoBookmarkIv.setOnClickListener {
-
+            if(userBookMarkBoolean) {
+                userBookMarkBoolean = false
+                friendsInfoBookmarkIv.setImageResource(R.drawable.empty_star)
+            }
+            else {
+                userBookMarkBoolean = true
+                friendsInfoBookmarkIv.setImageResource(R.drawable.full_star)
+            }
+            friendBookMarkChange(userBookMarkBoolean, userNick)
         }
         friendsInfoDeleteIv.setOnClickListener {
             val dlg = CustomFriendDeleteDialogAdapter(this@FriendsInfoActivity)
@@ -63,6 +78,35 @@ class FriendsInfoActivity : AppCompatActivity() {
             }
             dlg.show(userNick)
         }
+    }
+
+    private fun friendBookMarkChange(check: Boolean, friendNickname: String) {
+        val storeNick = preferences.getString("accountNickname", "").toString()
+        val callPost = service.friendBookMarkChange(check, friendNickname, storeNick)
+        callPost.enqueue(object: Callback<String?> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        if(result == "AddPass") {
+                            Toast.makeText(this@FriendsInfoActivity, "즐겨찾기에 등록 하였습니다", Toast.LENGTH_SHORT).show()
+                        }
+                        else if(result == "NullPass") {
+                            Toast.makeText(this@FriendsInfoActivity, "즐겨찾기에 삭제 하였습니다", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@FriendsInfoActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@FriendsInfoActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun friendDelete(userNickname: String) {

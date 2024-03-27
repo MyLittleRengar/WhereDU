@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.dialog.CustomFriendAddDialogAdapter
+import com.project.wheredu.recycler.BookMarkFriendListAdapter
 import com.project.wheredu.recycler.FriendItem
 import com.project.wheredu.recycler.FriendListAdapter
 import okhttp3.ResponseBody
@@ -34,6 +35,7 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var friendsAddIv: ImageView
     private lateinit var friendUserProfileIv: ImageView
     private lateinit var friendUserNicknameTv: TextView
+    private lateinit var friendsBookmarkRv: RecyclerView
     private lateinit var friendsListRv: RecyclerView
     private lateinit var friendSearchTextEt: EditText
     private lateinit var friendSearchBtn: Button
@@ -43,7 +45,9 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var preferences: SharedPreferences
 
     private var datas = mutableListOf<FriendItem>()
+    private var datas2 = mutableListOf<FriendItem>()
     private lateinit var friendAdapter: FriendListAdapter
+    private lateinit var bookmarkFriendAdapter: BookMarkFriendListAdapter
 
     private val service = Service.getService()
 
@@ -51,7 +55,9 @@ class FriendsActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         datas.clear()
+        datas2.clear()
         friendListDataCount(storeNick)
+        bookmarkFriendListDataCount(storeNick)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +66,7 @@ class FriendsActivity : AppCompatActivity() {
         friendUserProfileIv = findViewById(R.id.friendUserProfileIV)
         friendUserNicknameTv = findViewById(R.id.friendUserNicknameTV)
         friendsAddIv = findViewById(R.id.friendsAddIv)
+        friendsBookmarkRv = findViewById(R.id.friendsBookmarkRV)
         friendsListRv = findViewById(R.id.friendsListRV)
         friendSearchTextEt = findViewById(R.id.friendSearchTextET)
         friendSearchBtn = findViewById(R.id.friendSearchBTN)
@@ -71,6 +78,7 @@ class FriendsActivity : AppCompatActivity() {
         friendUserNicknameTv.text = storeNick
         downloadImage(storeNick)
         friendListDataCount(storeNick)
+        bookmarkFriendListDataCount(storeNick)
 
         friendSearchClearIv.setOnClickListener {
             if(friendSearchClearIv.visibility == View.VISIBLE) {
@@ -188,6 +196,15 @@ class FriendsActivity : AppCompatActivity() {
         }
     }
 
+    private fun loopInt2(data: Int, userNickname:String) {
+        for(i in 0 until data) {
+            bookmarkFriendListData(userNickname, i)
+            if(i == 0) {
+                datas2.clear()
+            }
+        }
+    }
+
     private fun friendListDataCount(userNickname: String) {
         val callPost = service.returnFriendCount(userNickname)
         callPost.enqueue(object: Callback<String> {
@@ -236,6 +253,72 @@ class FriendsActivity : AppCompatActivity() {
         })
     }
 
+    private fun bookmarkFriendListDataCount(userNickname: String) {
+        val callPost = service.returnBookMarkFriendCount(userNickname)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toInt()
+                        loopInt2(result, userNickname)
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@FriendsActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@FriendsActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun bookmarkFriendListData(userNickname: String, userInt: Int) {
+        val callPost = service.bookmarkFriendListData(userNickname, userInt)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        downloadImage3(result)
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@FriendsActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@FriendsActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun downloadImage3(userNickname: String) {
+        val call = service.downloadImage(userNickname)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val imageBytes = response.body()?.bytes()
+                    imageBytes?.let {
+                        val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
+                        bookmarkInitRecycler(bitmap, userNickname)
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("MyPageActivity", "Image download failed: ${t.message}")
+            }
+        })
+    }
+
     private fun downloadImage2(userNickname: String) {
         val call = service.downloadImage(userNickname)
         call.enqueue(object : Callback<ResponseBody> {
@@ -267,6 +350,21 @@ class FriendsActivity : AppCompatActivity() {
         datas.sortBy { it.nickname }
         friendAdapter.datas = datas
         friendAdapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun bookmarkInitRecycler(img: Bitmap, nickname: String) {
+        bookmarkFriendAdapter = BookMarkFriendListAdapter(this@FriendsActivity)
+        friendsBookmarkRv.adapter = bookmarkFriendAdapter
+
+        datas2.apply {
+            add(FriendItem(img, nickname))
+        }
+        friendsBookmarkRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        friendsBookmarkRv.setHasFixedSize(true)
+        datas2.sortBy { it.nickname }
+        bookmarkFriendAdapter.datas = datas2
+        bookmarkFriendAdapter.notifyDataSetChanged()
     }
 
     private fun downloadImage(userNickname: String) {
