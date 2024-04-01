@@ -131,6 +131,12 @@ interface ApiService {
         @Field("userNickname") userNickname: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/unregister")
+    fun unregister(
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

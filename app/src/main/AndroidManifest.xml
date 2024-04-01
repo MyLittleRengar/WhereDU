@@ -52,7 +52,7 @@
             android:name=".NearStoreActivity"
             android:exported="false" />
         <activity
-            android:name=".FriendsActivity"
+            android:name=".friend.FriendsActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"
@@ -82,7 +82,7 @@
             android:name=".MapActivity"
             android:exported="false" />
         <activity
-            android:name=".FriendsInfoActivity"
+            android:name=".friend.FriendsInfoActivity"
             android:exported="false" />
         <activity
             android:name=".login.LoginActivity"

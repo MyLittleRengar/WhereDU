@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.wheredu.friend.FriendsActivity
 import com.prolificinteractive.materialcalendarview.*
 import java.util.*
 

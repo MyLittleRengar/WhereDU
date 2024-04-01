@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.friend
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.project.wheredu.R
+import com.project.wheredu.Service
 import com.project.wheredu.dialog.CustomFriendDeleteDialogAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody

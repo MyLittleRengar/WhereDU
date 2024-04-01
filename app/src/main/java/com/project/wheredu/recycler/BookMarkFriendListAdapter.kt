@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.project.wheredu.FriendsInfoActivity
+import com.project.wheredu.friend.FriendsInfoActivity
 import com.project.wheredu.R
 
 class BookMarkFriendListAdapter(val context: Context): RecyclerView.Adapter<BookMarkFriendListAdapter.ViewHolder>() {

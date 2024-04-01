@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import com.project.wheredu.friend.FriendsInfoActivity
 import com.project.wheredu.R
 
-class FriendListAdapter(val context: Context): RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendSearchAdapter(val context: Context): RecyclerView.Adapter<FriendSearchAdapter.ViewHolder>() {
 
     var datas = mutableListOf<FriendItem>()
 
