@@ -66,8 +66,9 @@
 
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/promiseCalendar"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 app:mcv_arrowColor="@color/DUGreen"
                 app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
                 app:mcv_leftArrowMask="@drawable/cal_back"

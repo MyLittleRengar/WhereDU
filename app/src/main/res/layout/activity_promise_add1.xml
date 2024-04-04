@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/promiseBack1Iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
             app:srcCompat="@drawable/left_arrow"
@@ -28,7 +28,7 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/promiseDoneTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/promisePromiseNameET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -60,11 +60,13 @@
         android:textSize="18sp"
         android:text="약속 날짜" />
 
-    <CalendarView
-        android:id="@+id/promiseAddCV"
+    <DatePicker
+        android:id="@+id/promiseAddDP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"/>
 
     <TextView
         android:id="@+id/textView36"
@@ -76,7 +78,7 @@
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/editTextTime"
+        android:id="@+id/promisePromiseTimeET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

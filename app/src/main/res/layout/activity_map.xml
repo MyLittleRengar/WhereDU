@@ -24,28 +24,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <Button
-                    android:id="@+id/currentLocBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="시작"
-                    tools:ignore="HardcodedText,TextContrastCheck" />
-
-                <Button
-                    android:id="@+id/currentLosBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="중지"
-                    tools:ignore="HardcodedText,TextContrastCheck" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
                 android:padding="20dp">
@@ -58,7 +36,7 @@
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:visibility="invisible"
-                    app:srcCompat="@drawable/pin"
+                    app:srcCompat="@drawable/menu_users"
                     app:tint="#86B0C6"
                     tools:ignore="ContentDescription" />
 
@@ -70,7 +48,7 @@
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:visibility="invisible"
-                    app:srcCompat="@drawable/menu_users"
+                    app:srcCompat="@drawable/pin"
                     app:tint="#86B0C6"
                     tools:ignore="ContentDescription" />
 

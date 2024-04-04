@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.wheredu.friend.FriendsActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

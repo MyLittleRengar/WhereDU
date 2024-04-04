@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.style.ForegroundColorSpan
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,6 +17,7 @@ import java.util.*
 
 class PromiseActivity : AppCompatActivity() {
 
+    private lateinit var promiseAddIv: ImageView
     private lateinit var promiseCalendar: MaterialCalendarView
 
     private lateinit var promiseBottomNav: BottomNavigationView
@@ -24,9 +26,14 @@ class PromiseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_promise)
 
+        promiseAddIv = findViewById(R.id.promiseAddIv)
         promiseCalendar = findViewById(R.id.promiseCalendar)
 
         promiseBottomNav = findViewById(R.id.promise_bottomNav)
+
+        promiseAddIv.setOnClickListener {
+            startActivity(Intent(this@PromiseActivity, PromiseAdd1Activity::class.java))
+        }
 
         promiseBottomNav.setOnItemSelectedListener { item ->
             when(item.itemId) {

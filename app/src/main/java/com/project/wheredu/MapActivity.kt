@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -30,8 +29,6 @@ import net.daum.mf.map.api.MapView
 class MapActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
-    private lateinit var currentLocBtn: Button
-    private lateinit var currentLosBtn: Button
 
     private lateinit var fabMain: FloatingActionButton
     private lateinit var fabPromiseInfo: FloatingActionButton
@@ -46,6 +43,8 @@ class MapActivity : AppCompatActivity() {
     private lateinit var fabClose: Animation
     private var isFabOpen: Boolean = false
     private var isFabOpen2: Boolean = false
+
+    private var myLocBoolean: Boolean = false
 
     private val accessFineLocation = 1000
 
@@ -64,8 +63,6 @@ class MapActivity : AppCompatActivity() {
         setContentView(R.layout.activity_map)
 
         mapView = findViewById(R.id.mapView)
-        currentLocBtn = findViewById(R.id.currentLocBTN)
-        currentLosBtn = findViewById(R.id.currentLosBTN)
 
         fabMain = findViewById(R.id.fabMain)
         fabFriendInfo = findViewById(R.id.fabFriendInfo)
@@ -82,13 +79,7 @@ class MapActivity : AppCompatActivity() {
         userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         uNowPosition = MapPoint.mapPointWithGeoCoord(userNewLocation?.latitude!!, userNewLocation?.longitude!!)
 
-        val marker = MapPOIItem()
-        marker.itemName = "현 위치"
-        marker.mapPoint = uNowPosition
-        marker.markerType = MapPOIItem.MarkerType.BluePin
-        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-        mapView.addPOIItem(marker)
-        mapView.setMapCenterPointAndZoomLevel(uNowPosition, 1, true)
+        promiseMarker(35.9115006, 128.8160848)
 
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
@@ -113,23 +104,38 @@ class MapActivity : AppCompatActivity() {
             toggleFab2()
         }
         fabPromiseLoc.setOnClickListener {
+            promiseLocation(35.9115006, 128.8160848)
             toggleFab2()
         }
         fabMyLoc.setOnClickListener {
+            if(!myLocBoolean) {
+                if (checkLocationService()) {
+                    permissionCheck()
+                } else {
+                    Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                stopTracking()
+            }
             toggleFab2()
         }
+    }
 
-        currentLocBtn.setOnClickListener {
-            if (checkLocationService()) {
-                permissionCheck()
-            } else {
-                Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
-            }
+    private fun promiseMarker(uLatitude: Double, uLongitude: Double) {
+        val marker = MapPOIItem()
+        val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude,  uLongitude)
+        marker.apply {
+            itemName = "약속 장소"
+            mapPoint = uNowPosition
+            markerType = MapPOIItem.MarkerType.YellowPin
         }
+        mapView.addPOIItem(marker)
+    }
 
-        currentLosBtn.setOnClickListener {
-            stopTracking()
-        }
+    private fun promiseLocation(uLatitude: Double, uLongitude: Double) {
+        val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude,  uLongitude)
+        mapView.setMapCenterPointAndZoomLevel(uNowPosition, 2, true)
     }
 
     private fun toggleFab() {
@@ -182,7 +188,7 @@ class MapActivity : AppCompatActivity() {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // 권한 거절 (다시 한 번 물어봄)
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요.")
+                builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요")
                 builder.setPositiveButton("확인") { _, _ ->
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), accessFineLocation)
                 }
@@ -198,7 +204,7 @@ class MapActivity : AppCompatActivity() {
                 } else {
                     // 다시 묻지 않음 클릭 (앱 정보 화면으로 이동)
                     val builder = AlertDialog.Builder(this)
-                    builder.setMessage("현재 위치를 확인하시려면 설정에서 위치 권한을 허용해주세요.")
+                    builder.setMessage("현재 위치를 확인하시려면 설정에서 위치 권한을 허용해주세요")
                     builder.setPositiveButton("설정으로 이동") { _, _ ->
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
                         startActivity(intent)
@@ -223,14 +229,21 @@ class MapActivity : AppCompatActivity() {
     private fun startTracking() {
         val marker = MapPOIItem()
         marker.tag = 0
+        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading
+        mapView.setZoomLevel(2, true)
 
-        mapView.currentLocationTrackingMode =
-            MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading
-        mapView.setZoomLevel(3, true)
+        if(!myLocBoolean) {
+            myLocBoolean = true
+            fabMyLoc.setImageResource(R.drawable.colorpin)
+        }
     }
 
     private fun stopTracking() {
-        mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        if(myLocBoolean) {
+            myLocBoolean = false
+            fabMyLoc.setImageResource(R.drawable.pin)
+            mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        }
     }
 
     private fun initEvent() {
@@ -252,7 +265,7 @@ class MapActivity : AppCompatActivity() {
             override fun onSlide(p0: View, p1: Float) {}
             @SuppressLint("SwitchIntDef")
             override fun onStateChanged(p0: View, newState: Int) {
-                val tag = "friendInfoBehaviorEEEEEEEEEEEE"
+                val tag = "friendInfoBehavior"
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED-> {
                         Log.d(tag, "onStateChanged: 접음")
@@ -282,7 +295,7 @@ class MapActivity : AppCompatActivity() {
             override fun onSlide(p0: View, p1: Float) {}
             @SuppressLint("SwitchIntDef")
             override fun onStateChanged(p0: View, newState: Int) {
-                val tag = "friendInfoBehaviorEEEEEEEEEEEE"
+                val tag = "friendInfoBehavior"
                 when(newState) {
                     BottomSheetBehavior.STATE_COLLAPSED-> {
                         Log.d(tag, "onStateChanged: 접음")

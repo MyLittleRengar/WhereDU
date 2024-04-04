@@ -14,14 +14,14 @@
         tools:ignore="UselessParent">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/friends_profileIV"
+            android:id="@+id/friendsAddProfileIV"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:src="@drawable/free" />
 
         <TextView
-            android:id="@+id/friensNameTV"
+            android:id="@+id/friendsAddNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,7 +38,7 @@
             android:layout_weight="1"/>
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/friendsAddCB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end|center_vertical"

@@ -455,6 +455,9 @@ class FriendsActivity : AppCompatActivity() {
                             finish()
                             this@FriendsActivity.overridePendingTransition(0, 0)
                         }
+                        else if(result == "friendFail") {
+                            Toast.makeText(this@FriendsActivity,"이미 추가된 친구입니다", Toast.LENGTH_SHORT).show()
+                        }
                         if(result == "nicknameFail"){
                             Toast.makeText(this@FriendsActivity,"친구 닉네임이 틀립니다", Toast.LENGTH_SHORT).show()
                         }
