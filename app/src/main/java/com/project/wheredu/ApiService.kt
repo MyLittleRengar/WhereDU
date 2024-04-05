@@ -110,6 +110,18 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
+    @POST("/app/returnPromiseFriendCount")
+    fun returnPromiseFriendCount(
+        @Field("userNickname") userNickname: String
+    ): Call<String>
+    @FormUrlEncoded
+    @POST("/app/promiseFriendListData")
+    fun promiseFriendListData(
+        @Field("userNickname") userNickname: String,
+        @Field("friendInt") friendInt: Int
+    ): Call<String>
+
+    @FormUrlEncoded
     @POST("/app/searchText")
     fun searchText(
         @Field("searchText") searchText: String,

@@ -22,8 +22,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        //buildConfigField "String", "SERVER_IP", properties['api.serverip']
         buildConfigField("String", "SERVER_IP", "${properties["api.serverip"]}")
+        buildConfigField("String", "KAKAOAPI", "${properties["api.kakao_api"]}")
+        buildConfigField("String", "KAKAOURL", "${properties["api.kakao_url"]}")
     }
 
     buildTypes {

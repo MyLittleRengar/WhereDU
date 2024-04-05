@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/promiseBack3IV"
             android:layout_width="20dp"
             android:layout_height="20dp"
             app:srcCompat="@drawable/left_arrow"
@@ -27,7 +27,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/promiseDone3TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -54,7 +54,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editTextText4"
+            android:id="@+id/promisePlaceSearchET"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -72,9 +72,10 @@
             tools:ignore="Autofill" />
 
         <Button
-            android:id="@+id/button4"
-            android:layout_width="72dp"
+            android:id="@+id/promisePlaceSearchBTN"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_weight="0"
             android:background="@drawable/round_btn_friend"
             android:backgroundTint="@color/DUGreen"
             android:layout_marginStart="20dp"
@@ -96,7 +97,8 @@
         android:id="@+id/textView31"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/nanum_light"
         android:text="검색결과"
         android:textColor="@color/black"
@@ -104,9 +106,9 @@
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friendAddRV"
+        android:id="@+id/promisePlaceSearchRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:padding="15dp"
         tools:listitem="@layout/friend_add_place_list"/>
 </LinearLayout>

@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/promiseBack4IV"
             android:layout_width="20dp"
             android:layout_height="20dp"
             app:srcCompat="@drawable/left_arrow"
@@ -28,7 +28,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/promiseDone4TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -45,7 +45,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView34"
+            android:id="@+id/promiseNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_square_round_eb"
@@ -53,7 +53,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView37"
+            android:id="@+id/promiseDateTimeTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanum_light"
@@ -63,7 +63,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextText6"
+            android:id="@+id/promiseMemoET"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="30dp"
@@ -78,19 +78,21 @@
             tools:ignore="Autofill" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/promisePlaceBTN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clickable="false"
             android:background="@drawable/round_btn_friend"
             android:textSize="20sp"
             android:text="장소: " />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/promiseFriendBTN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clickable="false"
             android:background="@drawable/round_btn_friend"
             android:textSize="20sp"
             android:text="친구: " />
