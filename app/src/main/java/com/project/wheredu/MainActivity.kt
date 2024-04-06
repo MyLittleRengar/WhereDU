@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.friend.FriendsActivity
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
+
+        Log.d("Distance", distance)
 
         mainBottomNav = findViewById(R.id.main_bottomNav)
 

@@ -44,7 +44,9 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="49b6946888506ef36fcb6bf72bf6bb80" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBtxYYX6KmmHuMJvMa0SiSC5ZFGL3Nf1Tk"/>
         <activity
             android:name=".RecommendStoreActivity"
             android:exported="false" />
