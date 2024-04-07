@@ -30,6 +30,8 @@ class PromiseAdd3Activity : AppCompatActivity() {
 
     private lateinit var promiseBack3Iv: ImageView
     private lateinit var promiseDone3Tv: TextView
+    private lateinit var promiseSelectPlaceTv: TextView
+    private lateinit var promisePlaceTv: TextView
     private lateinit var promisePlaceSearchEt: EditText
     private lateinit var promisePlaceSearchBtn: Button
     private lateinit var promisePlaceSearchRv: RecyclerView
@@ -47,6 +49,8 @@ class PromiseAdd3Activity : AppCompatActivity() {
 
         promiseBack3Iv = findViewById(R.id.promiseBack3IV)
         promiseDone3Tv = findViewById(R.id.promiseDone3TV)
+        promiseSelectPlaceTv = findViewById(R.id.promiseSelectPlaceTV)
+        promisePlaceTv = findViewById(R.id.promisePlaceTV)
         promisePlaceSearchEt = findViewById(R.id.promisePlaceSearchET)
         promisePlaceSearchBtn = findViewById(R.id.promisePlaceSearchBTN)
         promisePlaceSearchRv = findViewById(R.id.promisePlaceSearchRV)
@@ -58,10 +62,13 @@ class PromiseAdd3Activity : AppCompatActivity() {
         promisePlaceSearchRv.layoutManager = LinearLayoutManager(this@PromiseAdd3Activity, LinearLayoutManager.VERTICAL, false)
         promisePlaceSearchRv.adapter = listAdapter
         listAdapter.setItemClickListener(object: PromisePlaceAdapter.OnItemClickListener{
+            @SuppressLint("SetTextI18n")
             override fun onClick(v: View, position: Int) {
                 promiseLatitude = listItems[position].x
                 promiseLongitude = listItems[position].y
                 promisePlaceName = listItems[position].name
+                promisePlaceTv.visibility = View.VISIBLE
+                promiseSelectPlaceTv.text = " ${listItems[position].name}"
             }
 
         })
@@ -72,25 +79,29 @@ class PromiseAdd3Activity : AppCompatActivity() {
         }
 
         promiseDone3Tv.setOnClickListener {
-            if(promiseLatitude != null && promiseLongitude != null && promisePlaceName.isNotBlank()) {
-                val intent = intent
-                val promiseName = intent.getStringExtra("promiseName").toString()
-                val promiseDate = intent.getStringExtra("promiseDate").toString()
-                val promiseTime = intent.getStringExtra("promiseTime").toString()
-                val promiseCheck = intent.getSerializableExtra("promiseCheck").toString()
+            if(promisePlaceTv.visibility == View.VISIBLE) {
+                if(promiseLatitude != null && promiseLongitude != null && promisePlaceName.isNotBlank()) {
+                    val intent = intent
+                    val promiseName = intent.getStringExtra("promiseName").toString()
+                    val promiseDate = intent.getStringExtra("promiseDate").toString()
+                    val promiseTime = intent.getStringExtra("promiseTime").toString()
+                    val promiseCheck = intent.getSerializableExtra("promiseCheck").toString()
 
-                val myIntent = Intent(this@PromiseAdd3Activity, PromiseAdd4Activity::class.java)
-                myIntent.putExtra("promiseName", promiseName)
-                myIntent.putExtra("promiseDate", promiseDate)
-                myIntent.putExtra("promiseTime", promiseTime)
-                myIntent.putExtra("promiseCheck", promiseCheck)
-                myIntent.putExtra("promiseLatitude", promiseLatitude)
-                myIntent.putExtra("promiseLongitude", promiseLongitude)
-                myIntent.putExtra("promisePlaceName", promisePlaceName)
-                startActivity(myIntent)
-                finish()
+                    val myIntent = Intent(this@PromiseAdd3Activity, PromiseAdd4Activity::class.java)
+                    myIntent.putExtra("promiseName", promiseName)
+                    myIntent.putExtra("promiseDate", promiseDate)
+                    myIntent.putExtra("promiseTime", promiseTime)
+                    myIntent.putExtra("promiseCheck", promiseCheck)
+                    myIntent.putExtra("promiseLatitude", promiseLatitude)
+                    myIntent.putExtra("promiseLongitude", promiseLongitude)
+                    myIntent.putExtra("promisePlaceName", promisePlaceName)
+                    startActivity(myIntent)
+                    finish()
+                }
             }
-            ToastMessage.show(this@PromiseAdd3Activity, "장소를 선택해주세요")
+            else {
+                ToastMessage.show(this@PromiseAdd3Activity, "장소를 선택해주세요")
+            }
         }
     }
 
@@ -106,11 +117,9 @@ class PromiseAdd3Activity : AppCompatActivity() {
             override fun onResponse(call: Call<ResultSearchKeyword>, response: Response<ResultSearchKeyword>) {
                 addItems(response.body())
             }
-
             override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
                 Log.w("LocalSearch", "통신 실패: ${t.message}")
             }
-
         })
     }
 
@@ -132,5 +141,4 @@ class PromiseAdd3Activity : AppCompatActivity() {
             ToastMessage.show(this@PromiseAdd3Activity, "검색 결과가 없습니다")
         }
     }
-
 }

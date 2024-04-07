@@ -1,12 +1,19 @@
 package com.project.wheredu
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 class PromiseAdd4Activity : AppCompatActivity() {
 
@@ -17,6 +24,8 @@ class PromiseAdd4Activity : AppCompatActivity() {
     private lateinit var promiseMemoEt: EditText
     private lateinit var promisePlaceBtn: Button
     private lateinit var promiseFriendBtn: Button
+
+    private val service = Service.getService()
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +43,9 @@ class PromiseAdd4Activity : AppCompatActivity() {
         val promiseDate = intent.getStringExtra("promiseDate").toString()
         val promiseTime = intent.getStringExtra("promiseTime").toString()
         val promiseCheck = intent.getSerializableExtra("promiseCheck").toString()
-        val promiseLatitude = intent.getDoubleExtra("promiseLatitude", 0.0).toString()
-        val promiseLongitude = intent.getDoubleExtra("promiseLongitude", 0.0).toString()
-        val promisePlaceName = intent.getStringExtra("promisePlaceName")
+        val promiseLatitude = intent.getDoubleExtra("promiseLatitude", 0.0)
+        val promiseLongitude = intent.getDoubleExtra("promiseLongitude", 0.0)
+        val promisePlaceName = intent.getStringExtra("promisePlaceName").toString()
 
         promiseNameTv.text = promiseName
         promiseDateTimeTv.text = "날짜: $promiseDate, 시간: $promiseTime"
@@ -52,11 +61,43 @@ class PromiseAdd4Activity : AppCompatActivity() {
 
 
         promiseDone4Tv.setOnClickListener {
-
+            val promiseMemo = promiseMemoEt.text.toString()
+            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promiseTime, checkSplit, promiseMemo)
         }
 
         promiseBack4Iv.setOnClickListener {
             finish()
         }
+    }
+
+    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, time: String, member: List<String>, memo: String) {
+        val callPost = service.addPromise(name, latitude, longitude, place, time, member, memo)
+        callPost.enqueue(object: Callback<String?> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        if(result == "pass") {
+                            ToastMessage.show(this@PromiseAdd4Activity, "약속이 추가되었습니다")
+                            startActivity(Intent(this@PromiseAdd4Activity, PromiseActivity::class.java))
+                            ActivityCompat.finishAffinity(this@PromiseAdd4Activity)
+                        }
+                        else if(result == "nameFail") {
+                            ToastMessage.show(this@PromiseAdd4Activity, "동일한 이름의 약속이 있습니다")
+                        }
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@PromiseAdd4Activity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@PromiseAdd4Activity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }

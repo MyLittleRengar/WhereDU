@@ -149,6 +149,17 @@ interface ApiService {
         @Field("userNickname") userNickname: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/addPromise")
+    fun addPromise(
+        @Field("promiseName") promiseName : String,
+        @Field("promiseLatitude") promiseLatitude : Double,
+        @Field("promiseLongitude") promiseLongitude : Double,
+        @Field("promisePlace") promisePlace : String,
+        @Field("promiseTime") promiseTime : String,
+        @Field("promiseMember") promiseMember : List<String>,
+        @Field("promiseMemo") promiseMemo : String
+    ): Call<String>
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(
