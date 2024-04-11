@@ -1,110 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".PromiseActivity">
+    tools:context=".promise.PromiseActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_toolbar"
         android:orientation="vertical"
-        android:padding="15dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_bold"
-                android:text="약속 일정"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/promiseAddIv"
-                android:layout_width="29dp"
-                android:layout_height="29dp"
-                android:layout_gravity="end|center"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/add_button"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@drawable/main_toolbar"
+            android:orientation="vertical"
+            android:padding="15dp">
 
-            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                android:id="@+id/promiseCalendar"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:mcv_arrowColor="@color/DUGreen"
-                app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
-                app:mcv_leftArrowMask="@drawable/cal_back"
-                app:mcv_rightArrowMask="@drawable/cal_next"
-                app:mcv_selectionColor="@color/DUGreen"
-                app:mcv_selectionMode="single"
-                app:mcv_showOtherDates="other_months"
-                app:mcv_tileSize="50dp"
-                app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
 
-            <View
-                android:id="@+id/divider7"
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:background="?android:attr/listDivider" />
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_bold"
+                    android:text="약속 일정"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/promise_ListRV"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="30dp"
-                tools:listitem="@layout/promise_list_item" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/promiseAddIv"
+                    android:layout_width="29dp"
+                    android:layout_height="29dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/add_button"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
-    </ScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/promise_bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:elevation="0dp"
-        app:itemIconSize="28dp"
-        app:itemIconTint="@color/DUGreen"
-        app:itemTextAppearanceActiveBoldEnabled="false"
-        app:labelVisibilityMode="labeled"
-        app:itemTextColor="@color/DUGreen"
-        app:menu="@menu/menu_nav" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/promiseCalendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:mcv_arrowColor="@color/DUGreen"
+                    app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
+                    app:mcv_leftArrowMask="@drawable/cal_back"
+                    app:mcv_rightArrowMask="@drawable/cal_next"
+                    app:mcv_selectionColor="@color/DUGreen"
+                    app:mcv_selectionMode="single"
+                    app:mcv_showOtherDates="other_months"
+                    app:mcv_tileSize="50dp"
+                    app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
+
+                <View
+                    android:id="@+id/divider7"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="?android:attr/listDivider" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/promise_ListRV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="30dp"
+                    tools:listitem="@layout/promise_list_item" />
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/promise_bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:elevation="0dp"
+            app:itemIconSize="28dp"
+            app:itemIconTint="@color/DUGreen"
+            app:itemTextAppearanceActiveBoldEnabled="false"
+            app:itemTextColor="@color/DUGreen"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_nav" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/map_bottomsheet_promiseinfo"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

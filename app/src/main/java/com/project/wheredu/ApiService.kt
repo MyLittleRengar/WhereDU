@@ -156,9 +156,22 @@ interface ApiService {
         @Field("promiseLatitude") promiseLatitude : Double,
         @Field("promiseLongitude") promiseLongitude : Double,
         @Field("promisePlace") promisePlace : String,
+        @Field("promiseDate") promiseDate: String,
         @Field("promiseTime") promiseTime : String,
         @Field("promiseMember") promiseMember : List<String>,
         @Field("promiseMemo") promiseMemo : String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/returnPromiseData")
+    fun returnPromiseData(
+        @Field("promiseName") name: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/deletePromise")
+    fun deletePromise(
+        @Field("name") name: String
     ): Call<String>
     /*@FormUrlEncoded
     @POST("/app/changeData")

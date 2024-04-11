@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:background="@color/white"
-    tools:context=".PromiseAdd4Activity">
+    tools:context=".promise.PromiseAdd4Activity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +85,7 @@
             android:clickable="false"
             android:background="@drawable/round_btn_friend"
             android:textSize="20sp"
-            android:text="장소: " />
+            android:text="장소" />
 
         <Button
             android:id="@+id/promiseFriendBTN"
@@ -95,7 +95,7 @@
             android:clickable="false"
             android:background="@drawable/round_btn_friend"
             android:textSize="20sp"
-            android:text="친구: " />
+            android:text="친구" />
     </LinearLayout>
 
 </LinearLayout>

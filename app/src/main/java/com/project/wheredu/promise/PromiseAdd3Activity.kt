@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.promise
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -12,6 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.wheredu.BuildConfig
+import com.project.wheredu.KakaoAPI
+import com.project.wheredu.R
+import com.project.wheredu.ToastMessage
 import com.project.wheredu.recycler.PromisePlaceAdapter
 import com.project.wheredu.recycler.PromisePlaceItem
 import com.project.wheredu.recycler.ResultSearchKeyword

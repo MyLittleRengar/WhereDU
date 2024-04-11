@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.MainActivity
 import com.project.wheredu.MyPageActivity
-import com.project.wheredu.PromiseActivity
+import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.R
 import com.project.wheredu.Service
 import com.project.wheredu.dialog.CustomFriendAddDialogAdapter
@@ -65,11 +65,13 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var storeNick: String
     override fun onRestart() {
         super.onRestart()
-        datas.clear()
+        /*datas.clear()
         datas2.clear()
         datas3.clear()
         friendListDataCount(storeNick)
-        bookmarkFriendListDataCount(storeNick)
+        bookmarkFriendListDataCount(storeNick)*/
+        startActivity(Intent(this@FriendsActivity, FriendsActivity::class.java))
+        finish()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

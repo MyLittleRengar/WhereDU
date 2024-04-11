@@ -284,8 +284,6 @@ class MapActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
         })
     }
 
@@ -314,9 +312,6 @@ class MapActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
         })
     }
-
 }

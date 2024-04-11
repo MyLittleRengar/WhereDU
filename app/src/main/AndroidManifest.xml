@@ -29,16 +29,16 @@
             android:name=".EventActivity"
             android:exported="false" />
         <activity
-            android:name=".PromiseAdd4Activity"
+            android:name=".promise.PromiseAdd4Activity"
             android:exported="false" />
         <activity
-            android:name=".PromiseAdd3Activity"
+            android:name=".promise.PromiseAdd3Activity"
             android:exported="false" />
         <activity
-            android:name=".PromiseAdd2Activity"
+            android:name=".promise.PromiseAdd2Activity"
             android:exported="false" />
         <activity
-            android:name=".PromiseAdd1Activity"
+            android:name=".promise.PromiseAdd1Activity"
             android:exported="false" />
 
         <meta-data
@@ -75,7 +75,7 @@
             android:name=".login.Register1Activity"
             android:exported="false" />
         <activity
-            android:name=".PromiseActivity"
+            android:name=".promise.PromiseActivity"
             android:exported="false" />
         <activity
             android:name=".login.FindActivity"

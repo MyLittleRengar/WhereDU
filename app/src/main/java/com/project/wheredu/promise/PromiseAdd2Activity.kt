@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.promise
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,6 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.wheredu.R
+import com.project.wheredu.Service
+import com.project.wheredu.ToastMessage
 import com.project.wheredu.recycler.CheckItem
 import com.project.wheredu.recycler.FriendItem
 import com.project.wheredu.recycler.PromiseFriendAdapter

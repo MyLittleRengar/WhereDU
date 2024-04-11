@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.promise
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,6 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.project.wheredu.R
+import com.project.wheredu.Service
+import com.project.wheredu.ToastMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +65,7 @@ class PromiseAdd4Activity : AppCompatActivity() {
 
         promiseDone4Tv.setOnClickListener {
             val promiseMemo = promiseMemoEt.text.toString()
-            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promiseTime, checkSplit, promiseMemo)
+            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promiseDate, promiseTime, checkSplit, promiseMemo)
         }
 
         promiseBack4Iv.setOnClickListener {
@@ -70,8 +73,8 @@ class PromiseAdd4Activity : AppCompatActivity() {
         }
     }
 
-    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, time: String, member: List<String>, memo: String) {
-        val callPost = service.addPromise(name, latitude, longitude, place, time, member, memo)
+    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, date: String, time: String, member: List<String>, memo: String) {
+        val callPost = service.addPromise(name, latitude, longitude, place, date, time, member, memo)
         callPost.enqueue(object: Callback<String?> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {

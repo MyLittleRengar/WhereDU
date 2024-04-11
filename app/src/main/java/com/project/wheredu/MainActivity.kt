@@ -6,15 +6,20 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.friend.FriendsActivity
+import com.project.wheredu.promise.PromiseActivity
+import com.project.wheredu.promise.PromiseAdd1Activity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var promiseAddIv: ImageView
 
     private lateinit var mainBottomNav: BottomNavigationView
 
@@ -27,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        promiseAddIv = findViewById(R.id.promiseAddIv)
+
         val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
 
         Log.d("Distance", distance)
@@ -38,6 +45,11 @@ class MainActivity : AppCompatActivity() {
         val storeNick = preferences.getString("accountNickname", "").toString()
         if(storeNick == "") {
             returnNickname(storeID)
+        }
+
+        promiseAddIv.setOnClickListener {
+            startActivity(Intent(this@MainActivity, PromiseAdd1Activity::class.java))
+            finish()
         }
 
         mainBottomNav.setOnItemSelectedListener { item ->

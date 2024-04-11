@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".PromiseAdd1Activity"
+    tools:context=".promise.PromiseAdd1Activity"
     android:background="@color/white"
     tools:ignore="VisualLintBounds">
 
@@ -77,15 +77,11 @@
         android:text="약속 시간"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/promisePromiseTimeET"
-        android:layout_width="match_parent"
+    <TimePicker
+        android:id="@+id/promisePromiseTimeTP"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="time"
-        android:fontFamily="@font/nanum_square_round_eb"
-        android:minHeight="48dp"
-        android:textSize="18sp"
-        android:hint="약속 시간을 입력해주세요"
-        tools:ignore="Autofill" />
+        android:timePickerMode="spinner"
+        android:layout_gravity="center"/>
+
 </LinearLayout>
