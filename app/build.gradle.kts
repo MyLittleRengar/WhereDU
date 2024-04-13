@@ -51,7 +51,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -74,7 +73,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     //CircleImageview
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    //kakao api
+    //Kakao api
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(files("libs/libDaumMapAndroid.jar"))
     //Custom Calendar

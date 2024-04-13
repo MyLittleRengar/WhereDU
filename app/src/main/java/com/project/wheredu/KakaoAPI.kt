@@ -12,4 +12,15 @@ interface KakaoAPI {
         @Header("Authorization") key: String,
         @Query("query") query: String
     ): Call<ResultSearchKeyword>
+
+    @GET("v2/local/search/category.json")
+    fun getSearchCategory(
+        @Header("Authorization") key: String,
+        @Query("category_group_code") category: String,
+        @Query("y") y: String,
+        @Query("x") x: String,
+        @Query("radius") radius: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<ResultSearchKeyword>
 }

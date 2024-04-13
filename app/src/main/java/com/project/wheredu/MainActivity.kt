@@ -1,25 +1,42 @@
 package com.project.wheredu
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.friend.FriendsActivity
 import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.promise.PromiseAdd1Activity
+import com.project.wheredu.recycler.MainPlaceAdapter
+import com.project.wheredu.recycler.MainPlaceItem
+import com.project.wheredu.recycler.ResultSearchKeyword
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val BASE_URL = BuildConfig.KAKAOURL
+        const val API_KEY = BuildConfig.KAKAOAPI
+    }
+
     private lateinit var promiseAddIv: ImageView
+    private lateinit var nearStoreRv: RecyclerView
+    private lateinit var recommendCafeRv: RecyclerView
 
     private lateinit var mainBottomNav: BottomNavigationView
 
@@ -28,15 +45,42 @@ class MainActivity : AppCompatActivity() {
 
     private val service = Service.getService()
 
+    private var listItems = arrayListOf<MainPlaceItem>()
+    private var listAdapter = MainPlaceAdapter(listItems)
+
+    private var listItems2 = arrayListOf<MainPlaceItem>()
+    private var listAdapter2 = MainPlaceAdapter(listItems2)
+
+    private val cafe = "CE7"
+    private val restaurant = "FD6"
+
+    private lateinit var lm: LocationManager
+    private var userNewLocation: Location? = null
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         promiseAddIv = findViewById(R.id.promiseAddIv)
+        nearStoreRv = findViewById(R.id.nearStoreRv)
+        recommendCafeRv = findViewById(R.id.recommendCafeRv)
 
-        val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
+        //val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
+        //Log.d("Distance", distance)
 
-        Log.d("Distance", distance)
+        lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+
+        searchCategory()
+        searchCategory2()
+
+        recommendCafeRv.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        recommendCafeRv.adapter = listAdapter
+
+        nearStoreRv.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+        nearStoreRv.adapter = listAdapter2
+
 
         mainBottomNav = findViewById(R.id.main_bottomNav)
 
@@ -74,6 +118,80 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
             }
+        }
+    }
+
+    private fun searchCategory() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api = retrofit.create(KakaoAPI::class.java)
+        val call = api.getSearchCategory(API_KEY, cafe,userNewLocation?.latitude!!.toString(), userNewLocation?.longitude!!.toString(), 1000, 1, 15)
+
+        call.enqueue(object: Callback<ResultSearchKeyword> {
+            override fun onResponse(call: Call<ResultSearchKeyword>, response: Response<ResultSearchKeyword>) {
+                addItems(response.body())
+            }
+
+            override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
+                Log.w("MainActivity", "통신 실패: ${t.message}")
+            }
+        })
+    }
+
+    private fun searchCategory2() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api = retrofit.create(KakaoAPI::class.java)
+        val call = api.getSearchCategory(API_KEY, restaurant,userNewLocation?.latitude!!.toString(), userNewLocation?.longitude!!.toString(), 1000, 1, 15)
+
+        call.enqueue(object: Callback<ResultSearchKeyword> {
+            override fun onResponse(call: Call<ResultSearchKeyword>, response: Response<ResultSearchKeyword>) {
+                addItems2(response.body())
+            }
+
+            override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
+                Log.w("MainActivity", "통신 실패: ${t.message}")
+            }
+        })
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun addItems(searchResult: ResultSearchKeyword?) {
+        if (!searchResult?.documents.isNullOrEmpty()) {
+            listItems.clear()
+            for (document in searchResult!!.documents) {
+                val item = MainPlaceItem(
+                    document.place_name,
+                    document.phone.ifEmpty { "없음" },
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
+                    document.place_url,
+                    document.x.toDouble(),
+                    document.y.toDouble())
+                listItems.add(item)
+            }
+            listAdapter.notifyDataSetChanged()
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun addItems2(searchResult: ResultSearchKeyword?) {
+        if (!searchResult?.documents.isNullOrEmpty()) {
+            listItems2.clear()
+            for (document in searchResult!!.documents) {
+                val item = MainPlaceItem(
+                    document.place_name,
+                    document.phone.ifEmpty { "없음" },
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
+                    document.place_url,
+                    document.x.toDouble(),
+                    document.y.toDouble())
+                listItems2.add(item)
+            }
+            listAdapter2.notifyDataSetChanged()
         }
     }
 
