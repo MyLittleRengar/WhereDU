@@ -17,7 +17,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/textView6"
@@ -31,17 +32,19 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/nearStoreBackIV"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="end|center"
-                app:srcCompat="@drawable/x_icon" />
+                app:srcCompat="@drawable/x_icon"
+                tools:ignore="ContentDescription" />
 
         </FrameLayout>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/nearStoreRV"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"

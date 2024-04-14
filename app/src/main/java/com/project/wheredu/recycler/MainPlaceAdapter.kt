@@ -19,7 +19,7 @@ class MainPlaceAdapter(private val itemList: ArrayList<MainPlaceItem>): Recycler
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.image.setImageResource(R.drawable.free)
+        holder.image.setImageResource(itemList[position].image)
         holder.name.text = itemList[position].name
         holder.tel.text = itemList[position].tel
         holder.distance.text = itemList[position].distance

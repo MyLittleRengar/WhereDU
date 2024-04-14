@@ -6,10 +6,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var promiseAddIv: ImageView
     private lateinit var nearStoreRv: RecyclerView
     private lateinit var recommendCafeRv: RecyclerView
+    private lateinit var nearStoreInfoTv: TextView
+    private lateinit var recommendCafeInfoTv: TextView
 
     private lateinit var mainBottomNav: BottomNavigationView
 
@@ -65,6 +69,8 @@ class MainActivity : AppCompatActivity() {
         promiseAddIv = findViewById(R.id.promiseAddIv)
         nearStoreRv = findViewById(R.id.nearStoreRv)
         recommendCafeRv = findViewById(R.id.recommendCafeRv)
+        nearStoreInfoTv = findViewById(R.id.nearStoreInfoTV)
+        recommendCafeInfoTv = findViewById(R.id.recommendCafeInfoTV)
 
         //val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
         //Log.d("Distance", distance)
@@ -75,12 +81,43 @@ class MainActivity : AppCompatActivity() {
         searchCategory()
         searchCategory2()
 
+        nearStoreInfoTv.setOnClickListener {
+            startActivity(Intent(this@MainActivity, NearStoreActivity::class.java))
+        }
+        recommendCafeInfoTv.setOnClickListener {
+            startActivity(Intent(this@MainActivity, RecommendStoreActivity::class.java))
+        }
+
         recommendCafeRv.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
         recommendCafeRv.adapter = listAdapter
 
+        listAdapter.setItemClickListener(object: MainPlaceAdapter.OnItemClickListener {
+            override fun onClick(url: String) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                val chooser = Intent.createChooser(intent, "웹 브라우저를 선택하세요")
+                if(chooser.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
+                else {
+                    ToastMessage.show(this@MainActivity, "웹 브라우저를 실행할 수 없습니다")
+                }
+            }
+        })
+
         nearStoreRv.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
         nearStoreRv.adapter = listAdapter2
-
+        listAdapter2.setItemClickListener(object: MainPlaceAdapter.OnItemClickListener {
+            override fun onClick(url: String) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                val chooser = Intent.createChooser(intent, "웹 브라우저를 선택하세요")
+                if(chooser.resolveActivity(packageManager) != null) {
+                    startActivity(intent)
+                }
+                else {
+                    ToastMessage.show(this@MainActivity, "웹 브라우저를 실행할 수 없습니다")
+                }
+            }
+        })
 
         mainBottomNav = findViewById(R.id.main_bottomNav)
 
@@ -165,6 +202,7 @@ class MainActivity : AppCompatActivity() {
             listItems.clear()
             for (document in searchResult!!.documents) {
                 val item = MainPlaceItem(
+                    R.drawable.cafe,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
                     PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
@@ -183,6 +221,7 @@ class MainActivity : AppCompatActivity() {
             listItems2.clear()
             for (document in searchResult!!.documents) {
                 val item = MainPlaceItem(
+                    R.drawable.store,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
                     PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
