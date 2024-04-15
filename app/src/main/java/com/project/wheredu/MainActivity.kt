@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.wheredu.api.KakaoAPI
+import com.project.wheredu.api.Service
 import com.project.wheredu.friend.FriendsActivity
 import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.promise.PromiseAdd1Activity

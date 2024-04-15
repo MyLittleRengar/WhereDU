@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.wheredu.api.KakaoAPI
 import com.project.wheredu.recycler.MainPlaceAdapter
 import com.project.wheredu.recycler.MainPlaceItem
 import com.project.wheredu.recycler.ResultSearchKeyword

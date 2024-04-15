@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.project.wheredu.R
-import com.project.wheredu.Service
+import com.project.wheredu.api.Service
 import com.project.wheredu.ToastMessage
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.api
 
 import com.project.wheredu.recycler.ResultSearchKeyword
 import retrofit2.Call

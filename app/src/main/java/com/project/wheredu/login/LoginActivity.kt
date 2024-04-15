@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.project.wheredu.MainActivity
 import com.project.wheredu.R
-import com.project.wheredu.Service
+import com.project.wheredu.api.Service
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

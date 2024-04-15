@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PastEventActivity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="지난 이벤트"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="186dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pastEventRV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        tools:listitem="@layout/event_list_item"/>
 </LinearLayout>

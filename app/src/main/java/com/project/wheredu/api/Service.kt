@@ -1,15 +1,17 @@
-package com.project.wheredu
+package com.project.wheredu.api
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.google.gson.Gson
+import com.project.wheredu.BuildConfig
+
 object Service {
     private lateinit var retrofit: Retrofit
     private const val url = BuildConfig.SERVER_IP
 
     fun getService(): ApiService {
-        if (!::retrofit.isInitialized) {
+        if (!Service::retrofit.isInitialized) {
             initializeRetrofit()
         }
         return retrofit.create(ApiService::class.java)

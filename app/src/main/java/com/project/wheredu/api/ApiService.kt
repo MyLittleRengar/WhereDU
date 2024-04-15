@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.api
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -172,6 +172,12 @@ interface ApiService {
     @POST("/app/deletePromise")
     fun deletePromise(
         @Field("name") name: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/eventData")
+    fun eventData(
+        @Field("event") event: String
     ): Call<String>
     /*@FormUrlEncoded
     @POST("/app/changeData")
