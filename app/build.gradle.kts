@@ -25,6 +25,7 @@ android {
         buildConfigField("String", "SERVER_IP", "${properties["api.serverip"]}")
         buildConfigField("String", "KAKAOAPI", "${properties["api.kakao_api"]}")
         buildConfigField("String", "KAKAOURL", "${properties["api.kakao_url"]}")
+        buildConfigField("String", "GOOGLEMAPAPI", "${properties["api.google_map_api"]}")
     }
 
     buildTypes {
@@ -85,4 +86,6 @@ dependencies {
     //Google Map
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.maps.android:android-maps-utils:2.2.1")
+    implementation("com.google.maps:google-maps-services:0.15.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }

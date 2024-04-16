@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.project.wheredu.R
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.Service
 import com.project.wheredu.dialog.CustomFriendDeleteDialogAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody

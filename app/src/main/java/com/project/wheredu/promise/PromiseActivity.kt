@@ -20,8 +20,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.project.wheredu.MainActivity
 import com.project.wheredu.MyPageActivity
 import com.project.wheredu.R
-import com.project.wheredu.api.Service
-import com.project.wheredu.ToastMessage
+import com.project.wheredu.utility.Service
+import com.project.wheredu.utility.ToastMessage
 import com.project.wheredu.dialog.CustomDeletePromiseDialogAdapter
 import com.project.wheredu.friend.FriendsActivity
 import com.project.wheredu.recycler.PromiseItem

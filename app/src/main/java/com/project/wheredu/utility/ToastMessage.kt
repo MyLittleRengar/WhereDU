@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.utility
 
 import android.content.Context
 import android.widget.Toast

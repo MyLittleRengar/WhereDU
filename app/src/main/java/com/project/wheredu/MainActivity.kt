@@ -16,14 +16,16 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.project.wheredu.api.KakaoAPI
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.KakaoAPI
+import com.project.wheredu.utility.Service
 import com.project.wheredu.friend.FriendsActivity
 import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.promise.PromiseAdd1Activity
 import com.project.wheredu.recycler.MainPlaceAdapter
 import com.project.wheredu.recycler.MainPlaceItem
 import com.project.wheredu.recycler.ResultSearchKeyword
+import com.project.wheredu.utility.PlaceDistance
+import com.project.wheredu.utility.ToastMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -207,7 +209,7 @@ class MainActivity : AppCompatActivity() {
                     R.drawable.cafe,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())
@@ -226,7 +228,7 @@ class MainActivity : AppCompatActivity() {
                     R.drawable.store,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())

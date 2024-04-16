@@ -9,7 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.project.wheredu.R
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.Service
 import retrofit2.*
 import java.io.IOException
 

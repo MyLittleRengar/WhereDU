@@ -25,7 +25,7 @@ import com.project.wheredu.MainActivity
 import com.project.wheredu.MyPageActivity
 import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.R
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.Service
 import com.project.wheredu.dialog.CustomFriendAddDialogAdapter
 import com.project.wheredu.recycler.BookMarkFriendListAdapter
 import com.project.wheredu.recycler.FriendItem

@@ -1,27 +1,28 @@
 package com.project.wheredu
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.Service
 import com.project.wheredu.recycler.EventItem
 import com.project.wheredu.recycler.EventListAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class NowEventActivity : AppCompatActivity() {
 
     private lateinit var nowEventRv: RecyclerView
 
-    private var listItems = arrayListOf<EventItem>()
-    private  var eventListAdapter = EventListAdapter(listItems)
-
+    private var datas = mutableListOf<EventItem>()
+    private lateinit var eventListAdapter: EventListAdapter
     private val service = Service.getService()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,23 +30,35 @@ class NowEventActivity : AppCompatActivity() {
 
         nowEventRv = findViewById(R.id.nowEventRV)
 
-        nowEventRv.layoutManager = LinearLayoutManager(this@NowEventActivity, LinearLayoutManager.VERTICAL, false)
-        nowEventRv.adapter = eventListAdapter
-        eventListAdapter.setItemClickListener(object: EventListAdapter.OnItemClickListener {
-            override fun onInfoClick(position: Int, name: String, start: String, end: String, day: String) {
-                val intent = Intent(this@NowEventActivity, EventInfoActivity::class.java)
-                intent.putExtra("eventName", name)
-                intent.putExtra("eventStart", start)
-                intent.putExtra("eventEnd", end)
-                intent.putExtra("eventDay", day)
-                startActivity(intent)
-                finish()
+        returnEventData()
+
+    }
+
+    private fun returnEventData() {
+        val callPost = service.returnEventData("")
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toInt()
+                        loopInt(result)
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@NowEventActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@NowEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun eventData(event: String) {
-        val callPost = service.eventData(event)
+    private fun eventData(pos: Int) {
+        val callPost = service.eventData(pos)
         callPost.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
@@ -63,7 +76,6 @@ class NowEventActivity : AppCompatActivity() {
             override fun onFailure(call: Call<String?>, t: Throwable) {
                 Toast.makeText(this@NowEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 
@@ -71,16 +83,43 @@ class NowEventActivity : AppCompatActivity() {
         val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
             .replace("eventName:","").replace("startDate:","").replace("endDate:","")
         val textSplit = replace.split(",")
-        listItems.clear()
-        initRecycler(textSplit.size, textSplit)
+        initRecycler(textSplit[0], textSplit[1], textSplit[2])
+    }
+
+    private fun loopInt(data: Int) {
+        for(i in 0 until data) {
+            eventData(i)
+            if(i == 0) {
+                datas.clear()
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun initRecycler(num: Int, data: List<String>) {
-        for(i in 0 until num) {
-            //val item = EventItem(name, start, end)
-            //listItems.add(item)
+    private fun initRecycler(name: String, start: String, end: String) {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+        val endString = LocalDate.parse(end, formatter)
+        val daysUntilEnd = ChronoUnit.DAYS.between(today, endString)
+        val dDay =
+            if (daysUntilEnd > 0) {
+                "D-${daysUntilEnd}"
+            } else if (daysUntilEnd == 0L) {
+                "D-Day"
+            } else {
+                "종료"
+            }
+        if(dDay != "종료") {
+            eventListAdapter = EventListAdapter(this)
+            nowEventRv.adapter = eventListAdapter
+
+            datas.apply {
+                add(EventItem(name, start, end))
+            }
+            nowEventRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            nowEventRv.setHasFixedSize(true)
+            eventListAdapter.datas = datas
+            eventListAdapter.notifyDataSetChanged()
         }
-        eventListAdapter.notifyDataSetChanged()
     }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.project.wheredu.api.Service
+import com.project.wheredu.utility.Service
 import com.project.wheredu.dialog.CustomUnregisterDialogAdapter
 import com.project.wheredu.login.LoginActivity
 import retrofit2.Call

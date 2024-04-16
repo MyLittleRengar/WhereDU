@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.wheredu.BuildConfig
-import com.project.wheredu.api.KakaoAPI
+import com.project.wheredu.utility.KakaoAPI
 import com.project.wheredu.R
-import com.project.wheredu.ToastMessage
+import com.project.wheredu.utility.ToastMessage
 import com.project.wheredu.recycler.PromisePlaceAdapter
 import com.project.wheredu.recycler.PromisePlaceItem
 import com.project.wheredu.recycler.ResultSearchKeyword

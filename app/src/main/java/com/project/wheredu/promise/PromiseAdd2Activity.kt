@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.wheredu.R
-import com.project.wheredu.api.Service
-import com.project.wheredu.ToastMessage
+import com.project.wheredu.utility.Service
+import com.project.wheredu.utility.ToastMessage
 import com.project.wheredu.recycler.CheckItem
 import com.project.wheredu.recycler.FriendItem
 import com.project.wheredu.recycler.PromiseFriendAdapter

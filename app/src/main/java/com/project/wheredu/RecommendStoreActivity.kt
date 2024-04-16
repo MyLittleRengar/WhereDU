@@ -12,10 +12,12 @@ import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.project.wheredu.api.KakaoAPI
+import com.project.wheredu.utility.KakaoAPI
 import com.project.wheredu.recycler.MainPlaceAdapter
 import com.project.wheredu.recycler.MainPlaceItem
 import com.project.wheredu.recycler.ResultSearchKeyword
+import com.project.wheredu.utility.PlaceDistance
+import com.project.wheredu.utility.ToastMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,7 +101,7 @@ class RecommendStoreActivity : AppCompatActivity() {
                     R.drawable.cafe,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble())+"m",
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())

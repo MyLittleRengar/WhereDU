@@ -1,4 +1,4 @@
-package com.project.wheredu.api
+package com.project.wheredu.utility
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -177,8 +177,21 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/eventData")
     fun eventData(
+        @Field("event") event: Int
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/returnEventData")
+    fun returnEventData(
         @Field("event") event: String
     ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/inquiry")
+    fun inquiry(
+        @Field("content") content: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

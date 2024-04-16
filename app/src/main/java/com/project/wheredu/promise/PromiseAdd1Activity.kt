@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import com.project.wheredu.R
-import com.project.wheredu.ToastMessage
+import com.project.wheredu.utility.ToastMessage
 import java.util.Calendar
 
 class PromiseAdd1Activity : AppCompatActivity() {
