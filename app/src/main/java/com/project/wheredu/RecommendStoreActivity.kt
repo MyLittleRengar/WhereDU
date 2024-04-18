@@ -101,12 +101,13 @@ class RecommendStoreActivity : AppCompatActivity() {
                     R.drawable.cafe,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
+                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.y.toDouble(), document.x.toDouble()),
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())
                 listItems.add(item)
             }
+            listItems.sortBy { it.distance }
             listAdapter.notifyDataSetChanged()
         }
     }

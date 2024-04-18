@@ -192,6 +192,12 @@ interface ApiService {
         @Field("content") content: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/recentPromise")
+    fun recentPromise(
+        @Field("userName") userName: String
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

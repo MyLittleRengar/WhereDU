@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         const val API_KEY = BuildConfig.KAKAOAPI
     }
 
+    private lateinit var promiseTitleTv: TextView
+    private lateinit var promiseRemainTimeTv: TextView
+    private lateinit var promiseLocationTv: TextView
     private lateinit var promiseAddIv: ImageView
     private lateinit var nearStoreRv: RecyclerView
     private lateinit var recommendCafeRv: RecyclerView
@@ -70,20 +73,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
+        val storeID = preferences.getString("accountID", "").toString()
+        val storeNick = preferences.getString("accountNickname", "").toString()
+        if(storeNick == "") {
+            returnNickname(storeID)
+        }
+
+        promiseTitleTv = findViewById(R.id.promiseTitleTv)
+        promiseRemainTimeTv = findViewById(R.id.promiseRemainTimeTV)
+        promiseLocationTv = findViewById(R.id.promiseLocationTV)
         promiseAddIv = findViewById(R.id.promiseAddIv)
         nearStoreRv = findViewById(R.id.nearStoreRv)
         recommendCafeRv = findViewById(R.id.recommendCafeRv)
         nearStoreInfoTv = findViewById(R.id.nearStoreInfoTV)
         recommendCafeInfoTv = findViewById(R.id.recommendCafeInfoTV)
 
-        //val distance = Distance.calculateAndFormatDistance(35.9124703, 128.8188155, 35.9026591, 128.8563364)
-        //Log.d("Distance", distance)
-
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
 
         searchCategory()
         searchCategory2()
+        recentPromise(storeNick)
 
         nearStoreInfoTv.setOnClickListener {
             startActivity(Intent(this@MainActivity, NearStoreActivity::class.java))
@@ -124,13 +135,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainBottomNav = findViewById(R.id.main_bottomNav)
-
-        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
-        val storeID = preferences.getString("accountID", "").toString()
-        val storeNick = preferences.getString("accountNickname", "").toString()
-        if(storeNick == "") {
-            returnNickname(storeID)
-        }
 
         promiseAddIv.setOnClickListener {
             startActivity(Intent(this@MainActivity, PromiseAdd1Activity::class.java))
@@ -205,14 +209,16 @@ class MainActivity : AppCompatActivity() {
         if (!searchResult?.documents.isNullOrEmpty()) {
             listItems.clear()
             for (document in searchResult!!.documents) {
+                val distance = PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!.toDouble(),userNewLocation?.longitude!!.toDouble(), document.y.toDouble(), document.x.toDouble())
                 val item = MainPlaceItem(
                     R.drawable.cafe,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
+                    distance,
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())
+                listItems.sortBy { it.distance }
                 listItems.add(item)
             }
             listAdapter.notifyDataSetChanged()
@@ -224,14 +230,16 @@ class MainActivity : AppCompatActivity() {
         if (!searchResult?.documents.isNullOrEmpty()) {
             listItems2.clear()
             for (document in searchResult!!.documents) {
+                val distance = PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!.toDouble(),userNewLocation?.longitude!!.toDouble(), document.y.toDouble(), document.x.toDouble())
                 val item = MainPlaceItem(
                     R.drawable.store,
                     document.place_name,
                     document.phone.ifEmpty { "없음" },
-                    PlaceDistance.calculateAndFormatDistance(userNewLocation?.latitude!!,userNewLocation?.longitude!!, document.x.toDouble(), document.y.toDouble()),
+                    distance,
                     document.place_url,
                     document.x.toDouble(),
                     document.y.toDouble())
+                listItems.sortBy { it.distance }
                 listItems2.add(item)
             }
             listAdapter2.notifyDataSetChanged()
@@ -261,5 +269,37 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun recentPromise(name: String) {
+        val callPost = service.recentPromise(name)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        replaceData(result)
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@MainActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun replaceData(result: String) {
+        val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
+            .replace("promiseName:","").replace("promisePlace:","").replace("promiseTime:","")
+        val textSplit = replace.split(",")
+        promiseTitleTv.text = textSplit[0]
+        promiseRemainTimeTv.text = textSplit[1]
+        promiseLocationTv.text = textSplit[2]
     }
 }

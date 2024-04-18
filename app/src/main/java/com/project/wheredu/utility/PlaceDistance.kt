@@ -1,33 +1,22 @@
 package com.project.wheredu.utility
 
-import com.google.maps.GeoApiContext
-import com.google.maps.model.DistanceMatrix
-import com.project.wheredu.BuildConfig
+import kotlin.math.*
 
 class PlaceDistance {
     companion object {
-        private val geoApiContext = GeoApiContext.Builder().apiKey(BuildConfig.GOOGLEMAPAPI).build()
-        fun calculateAndFormatDistance(latA: Double, longA: Double, latB: Double, longB: Double): String {
-            val origins = "$latA,$longA"
-            val destinations = "$latB,$longB"
+        fun calculateAndFormatDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
+            val R = 6371 * 1000 // 지구의 반지름 (단위: 미터)
+            val dLat = Math.toRadians(lat2 - lat1)
+            val dLon = Math.toRadians(lon2 - lon1)
+            val radLat1 = Math.toRadians(lat1)
+            val radLat2 = Math.toRadians(lat2)
 
-            return try {
-                val distanceMatrix: DistanceMatrix = com.google.maps.DistanceMatrixApi.newRequest(
-                    geoApiContext
-                )
-                    .origins(origins)
-                    .destinations(destinations)
-                    .await()
-                if (distanceMatrix.rows.isNotEmpty() && distanceMatrix.rows[0].elements.isNotEmpty()) {
-                    val distance = distanceMatrix.rows[0].elements[0].distance.inMeters.toDouble()
-                    String.format("%.2f", distance)+"m"
-                } else {
-                    "거리를 계산할 수 없습니다."
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                "오류가 발생했습니다."
-            }
+            val a = sin(dLat / 2) * sin(dLat / 2) +
+                    sin(dLon / 2) * sin(dLon / 2) * cos(radLat1) * cos(radLat2)
+            val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+            val distance = R * c // 거리 (단위: 미터)
+            return String.format("%.2f m", distance)
         }
     }
 }
