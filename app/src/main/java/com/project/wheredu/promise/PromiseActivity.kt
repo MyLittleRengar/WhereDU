@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +61,7 @@ class PromiseActivity : AppCompatActivity() {
 
         promiseBottomNav = findViewById(R.id.promise_bottomNav)
 
-        initEvent()
+        persistentBottomSheetPromiseInfoEvent()
 
         promiseListRv.layoutManager = LinearLayoutManager(this@PromiseActivity, LinearLayoutManager.VERTICAL, false)
         promiseListRv.adapter = promiseListAdapter
@@ -209,7 +210,7 @@ class PromiseActivity : AppCompatActivity() {
                 if(response.isSuccessful) {
                     try {
                         val result = response.body()!!.toString()
-                        Log.e("AAAAA", result)
+                        replaceData(result)
                         //bottomSheetExpanded()
                     }
                     catch (e: IOException) {
@@ -223,7 +224,6 @@ class PromiseActivity : AppCompatActivity() {
             override fun onFailure(call: Call<String?>, t: Throwable) {
                 ToastMessage.show(this@PromiseActivity, "서버 연결에 오류가 발생했습니다")
             }
-
         })
     }
 
@@ -233,8 +233,9 @@ class PromiseActivity : AppCompatActivity() {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {
                     try {
-                        val result = response.body()!!.toString()
-
+                        ToastMessage.show(this@PromiseActivity, "약속이 삭제되었습니다")
+                        startActivity(Intent(this@PromiseActivity, PromiseActivity::class.java))
+                        ActivityCompat.finishAffinity(this@PromiseActivity)
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -250,8 +251,11 @@ class PromiseActivity : AppCompatActivity() {
         })
     }
 
-    private fun initEvent() {
-        persistentBottomSheetPromiseInfoEvent()
+    private fun replaceData(result: String) {
+        val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
+            .replace("promiseName:","").replace("promisePlace:","").replace("promisePlaceDetail:","").replace("promiseDate:","").replace("promiseTime:","").replace("promiseMemo", "").replace("promiseMember:", "")
+        val textSplit = replace.split(",")
+        bottomSheetExpanded(textSplit[0], textSplit[1], textSplit[2], textSplit[3], textSplit[4], textSplit[5], textSplit[6])
     }
 
     private fun View.setTextViewText(id: Int, text: String) {

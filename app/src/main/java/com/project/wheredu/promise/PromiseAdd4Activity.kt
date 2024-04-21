@@ -49,6 +49,7 @@ class PromiseAdd4Activity : AppCompatActivity() {
         val promiseLatitude = intent.getDoubleExtra("promiseLatitude", 0.0)
         val promiseLongitude = intent.getDoubleExtra("promiseLongitude", 0.0)
         val promisePlaceName = intent.getStringExtra("promisePlaceName").toString()
+        val promisePlaceDetail = intent.getStringExtra("promisePlaceDetail").toString()
 
         promiseNameTv.text = promiseName
         promiseDateTimeTv.text = "날짜: $promiseDate, 시간: $promiseTime"
@@ -65,7 +66,7 @@ class PromiseAdd4Activity : AppCompatActivity() {
 
         promiseDone4Tv.setOnClickListener {
             val promiseMemo = promiseMemoEt.text.toString()
-            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promiseDate, promiseTime, checkSplit, promiseMemo)
+            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promisePlaceDetail,promiseDate, promiseTime, checkSplit, promiseMemo)
         }
 
         promiseBack4Iv.setOnClickListener {
@@ -73,8 +74,8 @@ class PromiseAdd4Activity : AppCompatActivity() {
         }
     }
 
-    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, date: String, time: String, member: List<String>, memo: String) {
-        val callPost = service.addPromise(name, latitude, longitude, place, date, time, member, memo)
+    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, detail: String, date: String, time: String, member: List<String>, memo: String) {
+        val callPost = service.addPromise(name, latitude, longitude, place, detail, date, time, member, memo)
         callPost.enqueue(object: Callback<String?> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {

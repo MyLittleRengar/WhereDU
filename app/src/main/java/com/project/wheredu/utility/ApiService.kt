@@ -156,6 +156,7 @@ interface ApiService {
         @Field("promiseLatitude") promiseLatitude : Double,
         @Field("promiseLongitude") promiseLongitude : Double,
         @Field("promisePlace") promisePlace : String,
+        @Field("promisePlaceDetail") promisePlaceDetail : String,
         @Field("promiseDate") promiseDate: String,
         @Field("promiseTime") promiseTime : String,
         @Field("promiseMember") promiseMember : List<String>,

@@ -2,29 +2,38 @@ package com.project.wheredu
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.project.wheredu.utility.Service
+import com.project.wheredu.utility.ToastMessage
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
+
 
 class MapActivity : AppCompatActivity() {
 
@@ -52,15 +61,33 @@ class MapActivity : AppCompatActivity() {
     private var userNewLocation: Location? = null
     private var uNowPosition: MapPoint? = null
 
+    private lateinit var promiseName: String
+    private lateinit var promiseDate: String
+    private lateinit var promiseTime: String
+    private lateinit var promisePlace: String
+    private lateinit var promisePlaceDetail: String
+    private lateinit var promiseMember: String
+    private lateinit var promiseMemo: String
+
+    private val service = Service.getService()
+
     private lateinit var bottomSheetPromiseInfoBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetFriendInfoBehavior: BottomSheetBehavior<LinearLayout>
     private val friendInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheetFriendInfo) }
     private val promiseInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheet_PromiseInfo) }
 
+    private lateinit var buttonStartLocationUpdates: Button
+    private lateinit var buttonStopLocationUpdates: Button
+    private lateinit var resultTv: TextView
+    private val REQUEST_CODE_LOCATION_PERMISSION = 1
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+
+        val getIntent = intent
+        val promiseName = getIntent.getStringExtra("promiseName").toString()
 
         mapView = findViewById(R.id.mapView)
 
@@ -73,7 +100,23 @@ class MapActivity : AppCompatActivity() {
         fabPromiseLoc = findViewById(R.id.fabPromiseLoc)
         fabMyLoc = findViewById(R.id.fabMyLoc)
 
+        buttonStartLocationUpdates = findViewById(R.id.buttonStartLocationUpdates)
+        buttonStopLocationUpdates = findViewById(R.id.buttonStopLocationUpdates)
+        resultTv = findViewById(R.id.resultTV)
+
+        buttonStartLocationUpdates.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION_PERMISSION)
+            } else {
+                startLocationService()
+            }
+        }
+        buttonStopLocationUpdates.setOnClickListener {
+            stopLocationService()
+        }
+
         initEvent()
+        returnPromiseData(promiseName)
 
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
@@ -120,6 +163,42 @@ class MapActivity : AppCompatActivity() {
             }
             toggleFab2()
         }
+    }
+
+    private fun returnPromiseData(name: String) {
+        val callPost = service.returnPromiseData(name)
+        callPost.enqueue(object: Callback<String?> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        replaceData(result)
+                        //bottomSheetExpanded()
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    ToastMessage.show(this@MapActivity, "오류가 발생했습니다")
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                ToastMessage.show(this@MapActivity, "서버 연결에 오류가 발생했습니다")
+            }
+        })
+    }
+    private fun replaceData(result: String) {
+        val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
+            .replace("promiseName:","").replace("promisePlace:","").replace("promisePlaceDetail:","").replace("promiseDate:","").replace("promiseTime:","").replace("promiseMemo", "").replace("promiseMember:", "")
+        val textSplit = replace.split(",")
+        promiseName = textSplit[0]
+        promiseDate = textSplit[1]
+        promiseTime = textSplit[2]
+        promisePlace = textSplit[3]
+        promisePlaceDetail = textSplit[4]
+        promiseMember = textSplit[5]
+        promiseMemo = textSplit[6]
     }
 
     private fun promiseMarker(uLatitude: Double, uLongitude: Double) {
@@ -246,14 +325,28 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    private fun View.setTextViewText(id: Int, text: String) {
+        findViewById<TextView>(id).text = text
+    }
+
     private fun initEvent() {
         persistentBottomSheetFriendInfoEvent()
         persistentBottomSheetPromiseInfoEvent()
+
         fabFriendInfo.setOnClickListener {
+            //RV 데이터 추가
             bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
         fabPromiseInfo.setOnClickListener {
+            with(findViewById<View>(R.id.per_bottom_sheet_PromiseInfo)) {
+                setTextViewText(R.id.bottomSheet_promiseNameTV, promiseName)
+                setTextViewText(R.id.bottomSheet_PromiseDateTV, "$promiseDate, $promiseTime")
+                setTextViewText(R.id.bottomSheet_PromisePlaceTV, promisePlace)
+                setTextViewText(R.id.bottomSheet_PromiseDetailTV, promisePlaceDetail)
+                setTextViewText(R.id.bottomSheet_PromiseMemberTV, promiseMember)
+                setTextViewText(R.id.bottomSheet_PromiseMemoTV, promiseMemo)
+            }
             bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
@@ -261,57 +354,48 @@ class MapActivity : AppCompatActivity() {
 
     private fun persistentBottomSheetFriendInfoEvent() {
         bottomSheetFriendInfoBehavior = BottomSheetBehavior.from(friendInfoBehavior)
-        bottomSheetFriendInfoBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(p0: View, p1: Float) {}
-            @SuppressLint("SwitchIntDef")
-            override fun onStateChanged(p0: View, newState: Int) {
-                val tag = "friendInfoBehavior"
-                when(newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED-> {
-                        Log.d(tag, "onStateChanged: 접음")
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING-> {
-                        Log.d(tag, "onStateChanged: 드래그")
-                    }
-                    BottomSheetBehavior.STATE_EXPANDED-> {
-                        Log.d(tag, "onStateChanged: 펼침")
-                    }
-                    BottomSheetBehavior.STATE_HIDDEN-> {
-                        Log.d(tag, "onStateChanged: 숨기기")
-                    }
-                    BottomSheetBehavior.STATE_SETTLING-> {
-                        Log.d(tag, "onStateChanged: 고정됨")
-                    }
-                }
-            }
-        })
     }
 
     private fun persistentBottomSheetPromiseInfoEvent() {
         bottomSheetPromiseInfoBehavior = BottomSheetBehavior.from(promiseInfoBehavior)
-        bottomSheetPromiseInfoBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(p0: View, p1: Float) {}
-            @SuppressLint("SwitchIntDef")
-            override fun onStateChanged(p0: View, newState: Int) {
-                val tag = "friendInfoBehavior"
-                when(newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED-> {
-                        Log.d(tag, "onStateChanged: 접음")
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING-> {
-                        Log.d(tag, "onStateChanged: 드래그")
-                    }
-                    BottomSheetBehavior.STATE_EXPANDED-> {
-                        Log.d(tag, "onStateChanged: 펼침")
-                    }
-                    BottomSheetBehavior.STATE_HIDDEN-> {
-                        Log.d(tag, "onStateChanged: 숨기기")
-                    }
-                    BottomSheetBehavior.STATE_SETTLING-> {
-                        Log.d(tag, "onStateChanged: 고정됨")
-                    }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationService()
+            } else {
+                Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun isLocationServiceRunning(): Boolean {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in activityManager.getRunningServices(Int.MAX_VALUE)) {
+            if (LocationService::class.java.name == service.service.className) {
+                if (service.foreground) {
+                    return true
                 }
             }
-        })
+        }
+        return false
+    }
+
+    private fun startLocationService() {
+        if (!isLocationServiceRunning()) {
+            val intent = Intent(applicationContext, LocationService::class.java)
+            intent.setAction(Constants.ACTION_START_LOCATION_SERVICE)
+            startService(intent)
+        }
+    }
+
+    private fun stopLocationService() {
+        if (isLocationServiceRunning()) {
+            val intent = Intent(applicationContext, LocationService::class.java)
+            intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE)
+            startService(intent)
+        }
     }
 }

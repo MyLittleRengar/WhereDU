@@ -46,6 +46,7 @@ class PromiseAdd3Activity : AppCompatActivity() {
     private var promiseLatitude: Double? = null
     private var promiseLongitude: Double? = null
     private lateinit var promisePlaceName: String
+    private lateinit var promisePlaceDetail: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,7 @@ class PromiseAdd3Activity : AppCompatActivity() {
                 promiseLatitude = listItems[position].x
                 promiseLongitude = listItems[position].y
                 promisePlaceName = listItems[position].name
+                promisePlaceDetail = listItems[position].road
                 promisePlaceTv.visibility = View.VISIBLE
                 promiseSelectPlaceTv.text = " ${listItems[position].name}"
             }
@@ -99,6 +101,7 @@ class PromiseAdd3Activity : AppCompatActivity() {
                     myIntent.putExtra("promiseLatitude", promiseLatitude)
                     myIntent.putExtra("promiseLongitude", promiseLongitude)
                     myIntent.putExtra("promisePlaceName", promisePlaceName)
+                    myIntent.putExtra("promisePlaceDetail", promisePlaceDetail)
                     startActivity(myIntent)
                     finish()
                 }

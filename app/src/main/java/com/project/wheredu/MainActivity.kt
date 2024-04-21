@@ -10,6 +10,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var promiseRemainTimeTv: TextView
     private lateinit var promiseLocationTv: TextView
     private lateinit var promiseAddIv: ImageView
+    private lateinit var mainPromiseEnterBtn: Button
     private lateinit var nearStoreRv: RecyclerView
     private lateinit var recommendCafeRv: RecyclerView
     private lateinit var nearStoreInfoTv: TextView
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         promiseRemainTimeTv = findViewById(R.id.promiseRemainTimeTV)
         promiseLocationTv = findViewById(R.id.promiseLocationTV)
         promiseAddIv = findViewById(R.id.promiseAddIv)
+        mainPromiseEnterBtn = findViewById(R.id.mainPromiseEnterBTN)
         nearStoreRv = findViewById(R.id.nearStoreRv)
         recommendCafeRv = findViewById(R.id.recommendCafeRv)
         nearStoreInfoTv = findViewById(R.id.nearStoreInfoTV)
@@ -95,6 +98,13 @@ class MainActivity : AppCompatActivity() {
         searchCategory()
         searchCategory2()
         recentPromise(storeNick)
+
+        mainPromiseEnterBtn.setOnClickListener {
+            val intent = Intent(this@MainActivity, MapActivity::class.java)
+            intent.putExtra("promiseName", promiseTitleTv.text.toString())
+            startActivity(intent)
+            finish()
+        }
 
         nearStoreInfoTv.setOnClickListener {
             startActivity(Intent(this@MainActivity, NearStoreActivity::class.java))
