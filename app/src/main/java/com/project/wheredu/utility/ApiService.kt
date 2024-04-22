@@ -199,6 +199,13 @@ interface ApiService {
         @Field("userName") userName: String
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/promiseTouchdown")
+    fun promiseTouchdown(
+        @Field("promiseName") promiseName: String,
+        //@Field("")
+    ): Call<String>
+
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

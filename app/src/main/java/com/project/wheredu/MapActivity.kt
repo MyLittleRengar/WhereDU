@@ -6,6 +6,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -24,8 +25,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.project.wheredu.utility.PlaceDistance
 import com.project.wheredu.utility.Service
 import com.project.wheredu.utility.ToastMessage
+import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -79,7 +82,9 @@ class MapActivity : AppCompatActivity() {
     private lateinit var buttonStartLocationUpdates: Button
     private lateinit var buttonStopLocationUpdates: Button
     private lateinit var resultTv: TextView
-    private val REQUEST_CODE_LOCATION_PERMISSION = 1
+    private val requestCodeLocationPermission = 1
+
+    private var marker = MapPOIItem()
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,7 +111,7 @@ class MapActivity : AppCompatActivity() {
 
         buttonStartLocationUpdates.setOnClickListener {
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION_PERMISSION)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCodeLocationPermission)
             } else {
                 startLocationService()
             }
@@ -141,6 +146,7 @@ class MapActivity : AppCompatActivity() {
             toggleFab()
         }
         fabTouchDown.setOnClickListener {
+            userLocationDistance(promiseName, userNewLocation?.latitude!!, userNewLocation?.longitude!!, 35.9115006, 128.8160848)
             toggleFab()
         }
         fabMain2.setOnClickListener {
@@ -201,14 +207,50 @@ class MapActivity : AppCompatActivity() {
         promiseMemo = textSplit[6]
     }
 
+    private fun userLocationDistance(promiseName: String, uLatitude: Double, uLongitude: Double, myLatitude: Double, myLongitude: Double) {
+        val distance = PlaceDistance.calculateAndFormatDistanceDouble(uLatitude, uLongitude, myLatitude, myLongitude)
+        if(distance <= 200) {
+            checkTouchdown(promiseName)
+        }
+        else {
+            ToastMessage.show(this@MapActivity, "아직 터치다운을 할 수 없습니다")
+        }
+    }
+
+    private fun checkTouchdown(name: String) {
+        val callPost = service.promiseTouchdown(name)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        if(result == "pass") {
+                            ToastMessage.show(this@MapActivity, "터치 다운!!")
+                        }
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    ToastMessage.show(this@MapActivity, "오류가 발생했습니다")
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                ToastMessage.show(this@MapActivity, "서버 연결에 오류가 발생했습니다")
+            }
+        })
+    }
+
     private fun promiseMarker(uLatitude: Double, uLongitude: Double) {
-        val marker = MapPOIItem()
+        val circle = MapCircle(MapPoint.mapPointWithGeoCoord(uLatitude, uLongitude), 200, Color.argb(128, 255, 0, 0), Color.argb(128, 255, 0 ,0))
         val uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude,  uLongitude)
         marker.apply {
             itemName = "약속 장소"
             mapPoint = uNowPosition
             markerType = MapPOIItem.MarkerType.YellowPin
         }
+        mapView.addCircle(circle)
         mapView.addPOIItem(marker)
     }
 
@@ -362,7 +404,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.isNotEmpty()) {
+        if (requestCode == requestCodeLocationPermission && grantResults.isNotEmpty()) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationService()
             } else {
