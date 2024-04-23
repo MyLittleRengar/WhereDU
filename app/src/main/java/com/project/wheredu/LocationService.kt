@@ -12,9 +12,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -25,10 +25,10 @@ class LocationService : Service() {
     private val mLocationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
-            if (locationResult.lastLocation != null) {
-                val latitude = locationResult.lastLocation!!.latitude
-                val longitude = locationResult.lastLocation!!.longitude
-                Log.v("LOCATION_UPDATE", "$latitude, $longitude")
+            locationResult.lastLocation?.let { location ->
+                val latitude = location.latitude
+                val longitude = location.longitude
+                onLocationUpdate(latitude, longitude)
             }
         }
     }
@@ -91,5 +91,12 @@ class LocationService : Service() {
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun onLocationUpdate(latitude: Double, longitude: Double) {
+        val intent = Intent("LocationUpdate")
+        intent.putExtra("latitude", latitude)
+        intent.putExtra("longitude", longitude)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 }

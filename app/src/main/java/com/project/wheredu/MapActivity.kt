@@ -3,8 +3,10 @@ package com.project.wheredu
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -12,6 +14,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -23,8 +26,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.project.wheredu.utility.GetAddress
 import com.project.wheredu.utility.PlaceDistance
 import com.project.wheredu.utility.Service
 import com.project.wheredu.utility.ToastMessage
@@ -81,7 +86,6 @@ class MapActivity : AppCompatActivity() {
 
     private lateinit var buttonStartLocationUpdates: Button
     private lateinit var buttonStopLocationUpdates: Button
-    private lateinit var resultTv: TextView
     private val requestCodeLocationPermission = 1
 
     private var marker = MapPOIItem()
@@ -90,6 +94,8 @@ class MapActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+
+        registerLocationUpdateReceiver()
 
         val getIntent = intent
         val promiseName = getIntent.getStringExtra("promiseName").toString()
@@ -107,7 +113,6 @@ class MapActivity : AppCompatActivity() {
 
         buttonStartLocationUpdates = findViewById(R.id.buttonStartLocationUpdates)
         buttonStopLocationUpdates = findViewById(R.id.buttonStopLocationUpdates)
-        resultTv = findViewById(R.id.resultTV)
 
         buttonStartLocationUpdates.setOnClickListener {
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -439,5 +444,36 @@ class MapActivity : AppCompatActivity() {
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE)
             startService(intent)
         }
+    }
+
+    private val locationUpdateReceiver = object: BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(intent?.action == "LocationUpdate") {
+                val latitude = intent.getDoubleExtra("latitude", 0.0)
+                val longitude = intent.getDoubleExtra("longitude", 0.0)
+                handleLocationUpdate(latitude,longitude)
+                val message = GetAddress.getAddress(this@MapActivity, latitude, longitude)
+                Log.v("LOCATION_UPDATE_ADDRESS", message)
+            }
+        }
+    }
+
+    private fun handleLocationUpdate(latitude: Double, longitude: Double) {
+        Log.v("LOCATION_UPDATE_CLIENT", "$latitude, $longitude")
+
+    }
+
+    private fun registerLocationUpdateReceiver() {
+        val filter = IntentFilter("LocationUpdate")
+        LocalBroadcastManager.getInstance(this).registerReceiver(locationUpdateReceiver, filter)
+    }
+
+    private fun unregisterLocationUpdateReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(locationUpdateReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterLocationUpdateReceiver()
     }
 }
