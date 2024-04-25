@@ -1,8 +1,10 @@
 package com.project.wheredu.login
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -10,10 +12,14 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.normal.TedPermission
 import com.project.wheredu.MainActivity
 import com.project.wheredu.R
 import com.project.wheredu.utility.Service
+import com.project.wheredu.utility.ToastMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,9 +49,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        checkPermission()
 
         idET = findViewById(R.id.idET)
         pwET = findViewById(R.id.pwET)
@@ -108,7 +117,6 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this@LoginActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                         }
                     }
-
                     override fun onFailure(call: Call<String?>, t: Throwable) {
                         Toast.makeText(this@LoginActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                     }
@@ -118,5 +126,22 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "아이디 또는 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    private fun checkPermission() {
+        TedPermission.create()
+            .setPermissionListener(object: PermissionListener {
+                override fun onPermissionGranted() {}
+
+                override fun onPermissionDenied(p0: MutableList<String>?) {
+                    ToastMessage.show(this@LoginActivity, "권한을 허용해주세요")
+                }
+            })
+            .setDeniedMessage("권한을 허용해주세요.\n[설정] > [앱 및 알림] > [고급] > [앱 권한]")
+            .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+            .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
+            .setPermissions(Manifest.permission.POST_NOTIFICATIONS)
+            .check()
     }
 }
