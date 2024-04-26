@@ -3,6 +3,7 @@ package com.project.wheredu.recycler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.wheredu.R
@@ -19,8 +20,9 @@ class PromiseListAdapter(private val itemList: ArrayList<PromiseItem>): Recycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = itemList[position].name
-        holder.friendList.text = itemList[position].friendList
+        holder.place.text = itemList[position].place
         holder.time.text = itemList[position].time
+        holder.date.text = itemList[position].date
         holder.promiseInfo.setOnClickListener {
             itemClickListener.onInfoClick(position, itemList[position].name, itemList[position].time)
         }
@@ -31,10 +33,11 @@ class PromiseListAdapter(private val itemList: ArrayList<PromiseItem>): Recycler
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.promise_PromiseNameTV)
-        val friendList: TextView = itemView.findViewById(R.id.promise_PromiseFriendsTV)
+        val place: TextView = itemView.findViewById(R.id.promise_PromisePlaceTV)
         val time: TextView = itemView.findViewById(R.id.promise_PromiseTimeTV)
-        val promiseInfo: TextView = itemView.findViewById(R.id.promise_PromiseInfoIV)
-        val promiseDelete: TextView = itemView.findViewById(R.id.promise_PromiseDeleteIV)
+        val date: TextView = itemView.findViewById(R.id.promise_PromiseDateTV)
+        val promiseInfo: ImageView = itemView.findViewById(R.id.promise_PromiseInfoIV)
+        val promiseDelete: ImageView = itemView.findViewById(R.id.promise_PromiseDeleteIV)
     }
 
     interface OnItemClickListener {

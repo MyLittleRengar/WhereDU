@@ -2,6 +2,7 @@ package com.project.wheredu.recycler
 
 data class PromiseItem(
     val name: String,
-    val friendList: String,
-    val time: String
+    val place: String,
+    val time: String,
+    val date: String
 )

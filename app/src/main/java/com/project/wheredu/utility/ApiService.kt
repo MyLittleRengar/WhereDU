@@ -166,7 +166,26 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/returnPromiseData")
     fun returnPromiseData(
-        @Field("promiseName") name: String
+        @Field("promiseName") promiseName: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/calendarPromiseData")
+    fun calendarPromiseData(
+        @Field("promiseName") promiseName: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/selectPromiseData")
+    fun selectPromiseData(
+        @Field("promiseDate") promiseDate: String,
+        @Field("cnt") cnt: Int
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/returnSelectPromiseData")
+    fun returnSelectPromiseData(
+        @Field("promiseDate") promiseDate: String
     ): Call<String>
 
     @FormUrlEncoded

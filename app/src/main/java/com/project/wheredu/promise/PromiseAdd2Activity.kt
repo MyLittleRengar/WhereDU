@@ -87,13 +87,6 @@ class PromiseAdd2Activity : AppCompatActivity(), PromiseFriendAdapter.CheckBoxSt
         } else {
             checkData.add(CheckItem(nickname, isChecked))
         }
-        val test = checkData.toString().replace("[","").replace("]","")
-        val test2 = test.split(",")
-        for(i in test2.indices) {
-            if(test2[i].contains("true")) {
-                Log.e("EEEEE", test2[i])
-            }
-        }
     }
 
     private fun loopInt(data: Int, userNickname:String) {

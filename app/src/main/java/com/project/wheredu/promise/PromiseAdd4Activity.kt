@@ -55,7 +55,10 @@ class PromiseAdd4Activity : AppCompatActivity() {
         promiseDateTimeTv.text = "날짜: $promiseDate, 시간: $promiseTime"
         promisePlaceBtn.text = promisePlaceName
         val checkReplace = promiseCheck.replace("=true", "").replace("[","").replace("]", "")
-        val checkSplit = checkReplace.split(",").sortedDescending()
+        val checkSplit = checkReplace.split(",")
+            .map { it.trim() }
+            .sorted()
+            .filter { !it.endsWith("=false")  }
         if(checkSplit.size >= 2) {
             promiseFriendBtn.text = "${checkSplit[0]}외 ${checkSplit.size-1}명"
         }
