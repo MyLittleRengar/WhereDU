@@ -29,7 +29,9 @@ import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.project.wheredu.utility.Constants
 import com.project.wheredu.utility.GetAddress
+import com.project.wheredu.utility.LocationService
 import com.project.wheredu.utility.PlaceDistance
 import com.project.wheredu.utility.Service
 import com.project.wheredu.utility.ToastMessage
@@ -99,6 +101,9 @@ class MapActivity : AppCompatActivity() {
 
         val getIntent = intent
         val promiseName = getIntent.getStringExtra("promiseName").toString()
+        val promiseLatitude = getIntent.getDoubleExtra("promiseLatitude", 0.0)
+        val promiseLongitude = getIntent.getDoubleExtra("promiseLongitude", 0.0)
+        Log.e("EEEE", "${promiseLatitude}+${promiseLongitude}")
 
         mapView = findViewById(R.id.mapView)
 
@@ -132,7 +137,9 @@ class MapActivity : AppCompatActivity() {
         userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         uNowPosition = MapPoint.mapPointWithGeoCoord(userNewLocation?.latitude!!, userNewLocation?.longitude!!)
 
-        promiseMarker(35.9115006, 128.8160848)
+        promiseMarker(promiseLongitude, promiseLatitude)
+
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(userNewLocation?.latitude!!,  userNewLocation?.longitude!!), 2, true)
 
         fabOpen = AnimationUtils.loadAnimation(this, R.anim.fab_open)
         fabClose = AnimationUtils.loadAnimation(this, R.anim.fab_close)
@@ -158,7 +165,7 @@ class MapActivity : AppCompatActivity() {
             toggleFab2()
         }
         fabPromiseLoc.setOnClickListener {
-            promiseLocation(35.9115006, 128.8160848)
+            promiseLocation(promiseLatitude, promiseLongitude)
             toggleFab2()
         }
         fabMyLoc.setOnClickListener {

@@ -10,10 +10,12 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,6 +35,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var promiseTitleTv: TextView
     private lateinit var promiseRemainTimeTv: TextView
     private lateinit var promiseLocationTv: TextView
+    private lateinit var pastListIv: ImageView
     private lateinit var promiseAddIv: ImageView
     private lateinit var mainPromiseEnterBtn: Button
     private lateinit var nearStoreRv: RecyclerView
@@ -70,6 +79,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lm: LocationManager
     private var userNewLocation: Location? = null
 
+    private var promiseLatitude: Double? = null
+    private var promiseLongitude: Double? = null
+
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         promiseTitleTv = findViewById(R.id.promiseTitleTv)
         promiseRemainTimeTv = findViewById(R.id.promiseRemainTimeTV)
         promiseLocationTv = findViewById(R.id.promiseLocationTV)
+        pastListIv = findViewById(R.id.pastListIv)
         promiseAddIv = findViewById(R.id.promiseAddIv)
         mainPromiseEnterBtn = findViewById(R.id.mainPromiseEnterBTN)
         nearStoreRv = findViewById(R.id.nearStoreRv)
@@ -102,8 +115,9 @@ class MainActivity : AppCompatActivity() {
         mainPromiseEnterBtn.setOnClickListener {
             val intent = Intent(this@MainActivity, MapActivity::class.java)
             intent.putExtra("promiseName", promiseTitleTv.text.toString())
+            intent.putExtra("promiseLatitude", promiseLatitude)
+            intent.putExtra("promiseLongitude", promiseLongitude)
             startActivity(intent)
-            finish()
         }
 
         nearStoreInfoTv.setOnClickListener {
@@ -145,6 +159,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainBottomNav = findViewById(R.id.main_bottomNav)
+
+        pastListIv.setOnClickListener {
+            startActivity(Intent(this@MainActivity, PastListActivity::class.java))
+            finish()
+        }
 
         promiseAddIv.setOnClickListener {
             startActivity(Intent(this@MainActivity, PromiseAdd1Activity::class.java))
@@ -288,7 +307,20 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful) {
                     try {
                         val result = response.body()!!.toString()
-                        replaceData(result)
+                        if(result != "noData") {
+                            promiseRemainTimeTv.visibility = View.VISIBLE
+                            promiseLocationTv.visibility = View.VISIBLE
+                            mainPromiseEnterBtn.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.DUGreen))
+                            mainPromiseEnterBtn.isEnabled = true
+                            replaceData(result)
+                        }
+                        else {
+                            promiseTitleTv.text = "약속 없음"
+                            promiseRemainTimeTv.visibility = View.GONE
+                            promiseLocationTv.visibility = View.GONE
+                            mainPromiseEnterBtn.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.gray))
+                            mainPromiseEnterBtn.isEnabled = false
+                        }
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -304,12 +336,50 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun replaceData(result: String) {
         val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
-            .replace("promiseName:","").replace("promisePlace:","").replace("promiseTime:","")
+            .replace("promiseName:","").replace("promisePlace:","").replace("promiseTime:","").replace("promiseDate:","").replace("promiseLatitude:", "").replace("promiseLongitude:", "")
         val textSplit = replace.split(",")
-        promiseTitleTv.text = textSplit[0]
-        promiseRemainTimeTv.text = textSplit[1]
-        promiseLocationTv.text = textSplit[2]
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy.M.dd")
+        val given = LocalDate.parse(textSplit[3], formatter)
+        val current = LocalDate.now()
+        if(given == current) {
+            val currentTime = LocalTime.now()
+            val targetTimeString = textSplit[2]
+            val targetTime = LocalTime.parse(targetTimeString, DateTimeFormatter.ofPattern("HH:mm"))
+            val remainingTime = targetTime.toSecondOfDay() - currentTime.toSecondOfDay()
+            val hours = remainingTime / 3600
+            val minutes = (remainingTime % 3600) / 60
+
+            val resultTime = "약속까지 ${hours}시간 ${minutes}분 남았어요!"
+
+            promiseTitleTv.text = textSplit[0]
+            promiseLocationTv.text = "${textSplit[1]}(으)로 가야해요"
+            promiseRemainTimeTv.text = resultTime
+            promiseLatitude = textSplit[4].toDouble()
+            promiseLongitude = textSplit[5].toDouble()
+        }
+        else {
+            val kstZoneId = ZoneId.of("Asia/Seoul")
+            val now = LocalDateTime.now(kstZoneId)
+            val endOfDay = LocalDateTime.of(LocalDate.now(kstZoneId), LocalTime.MAX)
+            val remainingTime = ChronoUnit.MINUTES.between(now, endOfDay)
+
+            val remainingHours = remainingTime / 60
+            val remainingMinutes = remainingTime % 60
+
+            val times = textSplit[2].split(":")
+            val calculationHour = remainingHours.toInt() + times[0].toInt()
+            val calculationMinute = remainingMinutes.toInt() + times[1].toInt()
+            val resultTime = "약속까지 ${calculationHour}시간 ${calculationMinute}분 남았어요!"
+
+            promiseTitleTv.text = textSplit[0]
+            promiseLocationTv.text = textSplit[1]+"(으)로 가야해요"
+            promiseRemainTimeTv.text = resultTime
+            promiseLatitude = textSplit[4].toDouble()
+            promiseLongitude = textSplit[5].toDouble()
+        }
     }
 }

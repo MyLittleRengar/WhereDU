@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.utility
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -19,6 +19,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.project.wheredu.R
 
 
 class LocationService : Service() {

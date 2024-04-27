@@ -65,7 +65,8 @@
             android:text="약속까지 남은 시간"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/promiseLocationTV"
@@ -76,7 +77,8 @@
             android:text="약속 장소"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/mainPromiseEnterBTN"

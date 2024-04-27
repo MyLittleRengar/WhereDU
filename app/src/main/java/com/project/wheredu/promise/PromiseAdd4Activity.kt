@@ -1,7 +1,9 @@
 package com.project.wheredu.promise
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -28,6 +30,8 @@ class PromiseAdd4Activity : AppCompatActivity() {
     private lateinit var promisePlaceBtn: Button
     private lateinit var promiseFriendBtn: Button
 
+    private lateinit var preferences: SharedPreferences
+
     private val service = Service.getService()
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +45,9 @@ class PromiseAdd4Activity : AppCompatActivity() {
         promiseMemoEt = findViewById(R.id.promiseMemoET)
         promisePlaceBtn = findViewById(R.id.promisePlaceBTN)
         promiseFriendBtn = findViewById(R.id.promiseFriendBTN)
+
+        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
+        val storeNick = preferences.getString("accountNickname", "").toString()
 
         val promiseName = intent.getStringExtra("promiseName").toString()
         val promiseDate = intent.getStringExtra("promiseDate").toString()
@@ -69,7 +76,7 @@ class PromiseAdd4Activity : AppCompatActivity() {
 
         promiseDone4Tv.setOnClickListener {
             val promiseMemo = promiseMemoEt.text.toString()
-            addPromise(promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promisePlaceDetail,promiseDate, promiseTime, checkSplit, promiseMemo)
+            addPromise(storeNick, promiseName, promiseLatitude, promiseLongitude, promisePlaceName, promisePlaceDetail,promiseDate, promiseTime, checkSplit, promiseMemo)
         }
 
         promiseBack4Iv.setOnClickListener {
@@ -77,8 +84,8 @@ class PromiseAdd4Activity : AppCompatActivity() {
         }
     }
 
-    private fun addPromise(name: String, latitude: Double, longitude: Double, place: String, detail: String, date: String, time: String, member: List<String>, memo: String) {
-        val callPost = service.addPromise(name, latitude, longitude, place, detail, date, time, member, memo)
+    private fun addPromise(owner: String,name: String, latitude: Double, longitude: Double, place: String, detail: String, date: String, time: String, member: List<String>, memo: String) {
+        val callPost = service.addPromise(owner, name, latitude, longitude, place, detail, date, time, member, memo)
         callPost.enqueue(object: Callback<String?> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {

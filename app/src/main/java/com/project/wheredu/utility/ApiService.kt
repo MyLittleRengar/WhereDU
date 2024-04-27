@@ -152,15 +152,16 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/addPromise")
     fun addPromise(
-        @Field("promiseName") promiseName : String,
-        @Field("promiseLatitude") promiseLatitude : Double,
-        @Field("promiseLongitude") promiseLongitude : Double,
-        @Field("promisePlace") promisePlace : String,
-        @Field("promisePlaceDetail") promisePlaceDetail : String,
+        @Field("promiseOwner") promiseOwner: String,
+        @Field("promiseName") promiseName: String,
+        @Field("promiseLatitude") promiseLatitude: Double,
+        @Field("promiseLongitude") promiseLongitude: Double,
+        @Field("promisePlace") promisePlace: String,
+        @Field("promisePlaceDetail") promisePlaceDetail: String,
         @Field("promiseDate") promiseDate: String,
-        @Field("promiseTime") promiseTime : String,
-        @Field("promiseMember") promiseMember : List<String>,
-        @Field("promiseMemo") promiseMemo : String
+        @Field("promiseTime") promiseTime: String,
+        @Field("promiseMember") promiseMember: List<String>,
+        @Field("promiseMemo") promiseMemo: String
     ): Call<String>
 
     @FormUrlEncoded
@@ -215,6 +216,19 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/recentPromise")
     fun recentPromise(
+        @Field("userName") userName: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/pastPromise")
+    fun pastPromise(
+        @Field("userName") userName: String,
+        @Field("cnt") cnt: Int
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/returnPastPromise")
+    fun returnPastPromise(
         @Field("userName") userName: String
     ): Call<String>
 
