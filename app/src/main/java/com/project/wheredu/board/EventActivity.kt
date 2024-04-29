@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.board
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
+import com.project.wheredu.MyPageActivity
+import com.project.wheredu.R
 
 class EventActivity : AppCompatActivity() {
 

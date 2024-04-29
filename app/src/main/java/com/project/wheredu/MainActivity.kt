@@ -22,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.wheredu.utility.KakaoAPI
 import com.project.wheredu.utility.Service
 import com.project.wheredu.friend.FriendsActivity
+import com.project.wheredu.promise.PastListActivity
 import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.promise.PromiseAdd1Activity
 import com.project.wheredu.recycler.MainPlaceAdapter

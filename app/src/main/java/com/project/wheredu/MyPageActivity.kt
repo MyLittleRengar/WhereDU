@@ -17,6 +17,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.wheredu.board.EventActivity
+import com.project.wheredu.board.InquiryActivity
+import com.project.wheredu.board.NoticeActivity
 import com.project.wheredu.utility.Service
 import com.project.wheredu.friend.FriendsActivity
 import com.project.wheredu.promise.PromiseActivity

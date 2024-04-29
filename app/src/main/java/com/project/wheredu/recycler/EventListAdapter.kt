@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.project.wheredu.EventInfoActivity
+import com.project.wheredu.board.EventInfoActivity
 import com.project.wheredu.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

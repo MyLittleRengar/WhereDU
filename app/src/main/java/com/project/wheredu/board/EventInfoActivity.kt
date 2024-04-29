@@ -1,9 +1,10 @@
-package com.project.wheredu
+package com.project.wheredu.board
 
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.project.wheredu.R
 import com.project.wheredu.utility.Service
 import com.project.wheredu.utility.ToastMessage
 import retrofit2.Call

@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"
@@ -21,29 +26,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhereDU"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".board.NoticeInfoActivity"
+            android:exported="false" />
+
         <service
             android:name=".utility.LocationService"
-            android:foregroundServiceType="location"
             android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <activity
+            android:name=".board.EventInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".EventInfoActivity"
+            android:name=".board.PastEventActivity"
             android:exported="false" />
         <activity
-            android:name=".PastEventActivity"
+            android:name=".board.NowEventActivity"
             android:exported="false" />
         <activity
-            android:name=".NowEventActivity"
+            android:name=".board.InquiryActivity"
             android:exported="false" />
         <activity
-            android:name=".InquiryActivity"
+            android:name=".board.NoticeActivity"
             android:exported="false" />
         <activity
-            android:name=".NoticeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EventActivity"
+            android:name=".board.EventActivity"
             android:exported="false" />
         <activity
             android:name=".promise.PromiseAdd4Activity"
@@ -81,7 +91,7 @@
             android:name=".MyPageActivity"
             android:exported="false" />
         <activity
-            android:name=".PastListActivity"
+            android:name=".promise.PastListActivity"
             android:exported="false" />
         <activity
             android:name=".login.FindPasswordActivity"
@@ -106,7 +116,7 @@
             android:exported="false" />
         <activity
             android:name=".login.LoginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

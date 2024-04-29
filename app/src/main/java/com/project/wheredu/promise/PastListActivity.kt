@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.promise
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,8 +11,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.project.wheredu.MainActivity
+import com.project.wheredu.MyPageActivity
+import com.project.wheredu.R
 import com.project.wheredu.friend.FriendsActivity
-import com.project.wheredu.promise.PromiseActivity
 import com.project.wheredu.recycler.PastPromiseItem
 import com.project.wheredu.recycler.PastPromiseListAdapter
 import com.project.wheredu.utility.Service

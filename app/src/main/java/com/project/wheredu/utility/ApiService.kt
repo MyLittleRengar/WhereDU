@@ -214,8 +214,28 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
+    @POST("/app/noticeData")
+    fun noticeData(
+        @Field("notice") notice: Int
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/returnNoticeData")
+    fun returnNoticeData(
+        @Field("notice") notice: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/noticeInfoData")
+    fun noticeInfoData(
+        @Field("noticeTitle") noticeTitle: String
+    ): Call<String>
+
+    @FormUrlEncoded
     @POST("/app/inquiry")
     fun inquiry(
+        @Field("nickname") nickname: String,
+        @Field("date") date: String,
         @Field("content") content: String
     ): Call<String>
 

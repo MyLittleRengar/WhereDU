@@ -1,4 +1,4 @@
-package com.project.wheredu
+package com.project.wheredu.board
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.wheredu.R
 import com.project.wheredu.utility.Service
 import com.project.wheredu.recycler.EventItem
 import com.project.wheredu.recycler.EventListAdapter
@@ -17,21 +18,20 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class NowEventActivity : AppCompatActivity() {
+class PastEventActivity : AppCompatActivity() {
 
-    private lateinit var nowEventRv: RecyclerView
+    private lateinit var pastEventRv: RecyclerView
 
     private var datas = mutableListOf<EventItem>()
     private lateinit var eventListAdapter: EventListAdapter
     private val service = Service.getService()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_now_event)
+        setContentView(R.layout.activity_past_event)
 
-        nowEventRv = findViewById(R.id.nowEventRV)
+        pastEventRv = findViewById(R.id.pastEventRV)
 
         returnEventData()
-
     }
 
     private fun returnEventData() {
@@ -53,11 +53,11 @@ class NowEventActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    Toast.makeText(this@NowEventActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PastEventActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<String?>, t: Throwable) {
-                Toast.makeText(this@NowEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PastEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -80,11 +80,11 @@ class NowEventActivity : AppCompatActivity() {
                         e.printStackTrace()
                     }
                 } else {
-                    Toast.makeText(this@NowEventActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PastEventActivity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<String?>, t: Throwable) {
-                Toast.makeText(this@NowEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PastEventActivity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -119,15 +119,15 @@ class NowEventActivity : AppCompatActivity() {
             } else {
                 "종료"
             }
-        if(dDay != "종료") {
+        if(dDay == "종료") {
             eventListAdapter = EventListAdapter(this)
-            nowEventRv.adapter = eventListAdapter
+            pastEventRv.adapter = eventListAdapter
 
             datas.apply {
                 add(EventItem(name, start, end))
             }
-            nowEventRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            nowEventRv.setHasFixedSize(true)
+            pastEventRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            pastEventRv.setHasFixedSize(true)
             eventListAdapter.datas = datas
             eventListAdapter.notifyDataSetChanged()
         }

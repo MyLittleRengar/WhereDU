@@ -5,14 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".board.NoticeActivity">
+    tools:context=".board.NoticeInfoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:background="@color/white"
         android:padding="15dp">
 
         <FrameLayout
@@ -32,7 +31,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/noticeBackIv"
+                android:id="@+id/noticeInfoBackIv"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="end|center"
@@ -44,14 +43,48 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider5"
+        android:id="@+id/divider13"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/noticeRv"
+    <TextView
+        android:id="@+id/noticeInfoNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_square_round_eb"
+        android:text="공지 제목"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/noticeInfoDateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/nanum"
+        android:text="공지 날짜"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/divider14"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/noticeInfoContentTV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/notice_list_item"/>
+        android:padding="10dp"
+        android:fontFamily="@font/nanum"
+        android:text="공지 내용"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
 </LinearLayout>
