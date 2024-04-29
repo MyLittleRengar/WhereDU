@@ -208,6 +208,12 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
+    @POST("/app/eventInfoData")
+    fun eventInfoData(
+        @Field("eventTitle") eventTitle: String
+    ): Call<String>
+
+    @FormUrlEncoded
     @POST("/app/inquiry")
     fun inquiry(
         @Field("content") content: String

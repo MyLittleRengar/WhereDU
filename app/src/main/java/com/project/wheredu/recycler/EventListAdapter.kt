@@ -55,10 +55,7 @@ class EventListAdapter(val context: Context) : RecyclerView.Adapter<EventListAda
 
             itemView.setOnClickListener {
                 val intent = Intent(context, EventInfoActivity::class.java)
-                intent.putExtra("eventName", item.name)
-                intent.putExtra("eventDay", dDay)
-                intent.putExtra("eventStart", item.start)
-                intent.putExtra("eventEnd", item.end)
+                intent.putExtra("eventTitle", item.name)
                 context.startActivity(intent)
             }
         }

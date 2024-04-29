@@ -40,8 +40,13 @@ class NowEventActivity : AppCompatActivity() {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {
                     try {
-                        val result = response.body()!!.toInt()
-                        loopInt(result)
+                        val result = response.body().toString()
+                        if(result != "noData") {
+                            loopInt(result.toInt())
+                        }
+                        else {
+                            datas.clear()
+                        }
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -64,7 +69,12 @@ class NowEventActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     try {
                         val result = response.body()!!.toString()
-                        replaceData(result)
+                        if(result != "noData") {
+                            replaceData(result)
+                        }
+                        else {
+                            datas.clear()
+                        }
 
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -81,7 +91,7 @@ class NowEventActivity : AppCompatActivity() {
 
     private fun replaceData(result: String) {
         val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
-            .replace("eventName:","").replace("startDate:","").replace("endDate:","")
+            .replace("eventTitle:","").replace("eventStartDate:","").replace("eventEndDate:","")
         val textSplit = replace.split(",")
         initRecycler(textSplit[0], textSplit[1], textSplit[2])
     }

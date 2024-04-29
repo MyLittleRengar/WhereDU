@@ -31,7 +31,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/eventBackIv"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="end|center"
@@ -65,16 +65,17 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <View
+        android:id="@+id/divider11"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
     <LinearLayout
         android:id="@+id/eventLL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View
-            android:id="@+id/divider11"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
     </LinearLayout>
 </LinearLayout>

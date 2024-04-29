@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 
 class EventActivity : AppCompatActivity() {
 
+    private lateinit var eventBackIv: ImageView
     private lateinit var eventTl: TabLayout
     private lateinit var eventLl: LinearLayout
     @SuppressLint("InflateParams")
@@ -17,8 +19,13 @@ class EventActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
+        eventBackIv = findViewById(R.id.eventBackIv)
         eventTl = findViewById(R.id.eventTL)
         eventLl = findViewById(R.id.eventLL)
+
+        eventBackIv.setOnClickListener {
+            finish()
+        }
 
         eventLl.addView(LayoutInflater.from(this@EventActivity).inflate(R.layout.activity_now_event, null))
 
