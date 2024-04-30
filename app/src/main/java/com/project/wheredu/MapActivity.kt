@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -27,8 +28,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.project.wheredu.recycler.MapMemberItem
+import com.project.wheredu.recycler.MapMemberListAdapter
 import com.project.wheredu.utility.Constants
 import com.project.wheredu.utility.GetAddress
 import com.project.wheredu.utility.LocationService
@@ -39,6 +44,8 @@ import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,7 +86,12 @@ class MapActivity : AppCompatActivity() {
     private lateinit var promiseMember: String
     private lateinit var promiseMemo: String
 
+    private lateinit var preferences: SharedPreferences
+    private lateinit var storeNick: String
+
     private val service = Service.getService()
+    private var listItems = arrayListOf<MapMemberItem>()
+    private var mapMemberListAdapter = MapMemberListAdapter(listItems)
 
     private lateinit var bottomSheetPromiseInfoBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetFriendInfoBehavior: BottomSheetBehavior<LinearLayout>
@@ -99,11 +111,13 @@ class MapActivity : AppCompatActivity() {
 
         registerLocationUpdateReceiver()
 
+        preferences = getSharedPreferences("Account", Context.MODE_PRIVATE)
+        storeNick = preferences.getString("accountNickname", "").toString()
+
         val getIntent = intent
         val promiseName = getIntent.getStringExtra("promiseName").toString()
         val promiseLatitude = getIntent.getDoubleExtra("promiseLatitude", 0.0)
         val promiseLongitude = getIntent.getDoubleExtra("promiseLongitude", 0.0)
-        Log.e("EEEE", "${promiseLatitude}+${promiseLongitude}")
 
         mapView = findViewById(R.id.mapView)
 
@@ -130,7 +144,6 @@ class MapActivity : AppCompatActivity() {
             stopLocationService()
         }
 
-        initEvent()
         returnPromiseData(promiseName)
 
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -191,7 +204,6 @@ class MapActivity : AppCompatActivity() {
                     try {
                         val result = response.body()!!.toString()
                         replaceData(result)
-                        //bottomSheetExpanded()
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -207,16 +219,28 @@ class MapActivity : AppCompatActivity() {
         })
     }
     private fun replaceData(result: String) {
-        val replace = result.replace("[","").replace("{","").replace("\"","").replace("}","").replace("]","")
-            .replace("promiseName:","").replace("promisePlace:","").replace("promisePlaceDetail:","").replace("promiseDate:","").replace("promiseTime:","").replace("promiseMemo", "").replace("promiseMember:", "")
-        val textSplit = replace.split(",")
+        val jsonArray = JSONArray(result)
+        val jsonObject = jsonArray.getJSONObject(0)
+
+        val promiseNameResult = jsonObject.getString("promiseName")
+        val promisePlaceResult = jsonObject.getString("promisePlace")
+        val promisePlaceDetailResult = jsonObject.getString("promisePlaceDetail")
+        val promiseDateResult = jsonObject.getString("promiseDate")
+        val promiseTimeResult = jsonObject.getString("promiseTime")
+        val promiseMembersResult = jsonObject.getString("promiseMember")
+        val promiseMemoResult = jsonObject.getString("promiseMemo")
+
+        val membersList = promiseMembersResult.split(", ")
+
+        val textSplit = listOf(promiseNameResult, promisePlaceResult, promisePlaceDetailResult, promiseDateResult, promiseTimeResult, membersList.joinToString(", "), promiseMemoResult)
         promiseName = textSplit[0]
-        promiseDate = textSplit[1]
-        promiseTime = textSplit[2]
-        promisePlace = textSplit[3]
-        promisePlaceDetail = textSplit[4]
+        promisePlace = textSplit[1]
+        promisePlaceDetail = textSplit[2]
+        promiseDate = textSplit[3]
+        promiseTime = textSplit[4]
         promiseMember = textSplit[5]
         promiseMemo = textSplit[6]
+        initEvent()
     }
 
     private fun userLocationDistance(promiseName: String, uLatitude: Double, uLongitude: Double, myLatitude: Double, myLongitude: Double) {
@@ -317,9 +341,7 @@ class MapActivity : AppCompatActivity() {
         val preference = getPreferences(MODE_PRIVATE)
         val isFirstCheck = preference.getBoolean("isFirstPermissionCheck", true)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // 권한이 없는 상태
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // 권한 거절 (다시 한 번 물어봄)
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요")
                 builder.setPositiveButton("확인") { _, _ ->
@@ -331,11 +353,9 @@ class MapActivity : AppCompatActivity() {
                 builder.show()
             } else {
                 if (isFirstCheck) {
-                    // 최초 권한 요청
                     preference.edit().putBoolean("isFirstPermissionCheck", false).apply()
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), accessFineLocation)
                 } else {
-                    // 다시 묻지 않음 클릭 (앱 정보 화면으로 이동)
                     val builder = AlertDialog.Builder(this)
                     builder.setMessage("현재 위치를 확인하시려면 설정에서 위치 권한을 허용해주세요")
                     builder.setPositiveButton("설정으로 이동") { _, _ ->
@@ -349,7 +369,6 @@ class MapActivity : AppCompatActivity() {
                 }
             }
         } else {
-            // 권한이 있는 상태
             startTracking()
         }
     }
@@ -388,7 +407,12 @@ class MapActivity : AppCompatActivity() {
         persistentBottomSheetPromiseInfoEvent()
 
         fabFriendInfo.setOnClickListener {
-            //RV 데이터 추가
+            with(findViewById<View>(R.id.per_bottom_sheetFriendInfo)) {
+                val rvId = findViewById<RecyclerView>(R.id.map_done_memberRV)
+                rvId.layoutManager = LinearLayoutManager(this@MapActivity, LinearLayoutManager.VERTICAL, false)
+                rvId.adapter = mapMemberListAdapter
+                memberLocation()
+            }
             bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
@@ -466,8 +490,96 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun handleLocationUpdate(latitude: Double, longitude: Double) {
-        Log.v("LOCATION_UPDATE_CLIENT", "$latitude, $longitude")
+        val callPost = service.location(storeNick, longitude, latitude)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {
+                        val result = response.body()!!.toString()
+                        if(result == "pass") {
+                            memberLocation()
+                        }
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    ToastMessage.show(this@MapActivity, "오류가 발생했습니다")
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                ToastMessage.show(this@MapActivity, "서버 연결에 오류가 발생했습니다")
+            }
+        })
+    }
 
+    private fun memberLocation() {
+        val memberList = promiseMember.split(", ")
+        for(i in memberList.indices) {
+            val callPost = service.memberLocation(memberList[i])
+            callPost.enqueue(object: Callback<String> {
+                override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                    if(response.isSuccessful) {
+                        try {
+                            val result = response.body()!!.toString()
+                            memberTouchdownCheck(result, memberList[i], i)
+                        }
+                        catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    else {
+                        ToastMessage.show(this@MapActivity, "오류가 발생했습니다")
+                    }
+                }
+                override fun onFailure(call: Call<String?>, t: Throwable) {
+                    ToastMessage.show(this@MapActivity, "서버 연결에 오류가 발생했습니다")
+                }
+            })
+        }
+    }
+
+    private fun memberTouchdownCheck(result: String, nickname: String, cnt: Int) {
+        val callPost = service.memberTouchdown(nickname)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if(response.isSuccessful) {
+                    try {
+                        val nowResult = response.body()!!.toString()
+                        selectReplaceData(result, cnt)
+                    }
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                ToastMessage.show(this@MapActivity, "서버 연결에 오류가 발생했습니다")
+            }
+        })
+    }
+
+    private fun selectReplaceData(result: String, cnt: Int) {
+        val jsonObject = JSONObject(result)
+
+        val nickname = jsonObject.getString("nickname")
+        val longitude = jsonObject.getString("longitude")
+        val latitude = jsonObject.getString("latitude")
+
+        val textSplit = listOf(nickname, longitude, latitude)
+        initRecycle(textSplit, cnt)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun initRecycle(data: List<String>, cnt: Int) {
+        if(data.isNotEmpty()) {
+            listItems.clear()
+            val mapCharacterDrawables = arrayOf(R.drawable.mapcharacter0, R.drawable.mapcharacter1, R.drawable.mapcharacter2, R.drawable.mapcharacter3, R.drawable.mapcharacter4)
+            val item = MapMemberItem(nickname = data[0], img = mapCharacterDrawables[cnt])
+            listItems.add(item)
+            mapMemberListAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun registerLocationUpdateReceiver() {

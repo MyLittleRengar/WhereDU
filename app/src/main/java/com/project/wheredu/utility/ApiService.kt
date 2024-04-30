@@ -265,6 +265,25 @@ interface ApiService {
         //@Field("")
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("/app/location")
+    fun location(
+        @Field("nickname") nickname: String,
+        @Field("longitude") longitude: Double,
+        @Field("latitude") latitude: Double
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/memberLocation")
+    fun memberLocation(
+        @Field("nickname") nickname: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("/app/memberTouchdown")
+    fun memberTouchdown(
+        @Field("nickname") nickname: String
+    ): Call<String>
     /*@FormUrlEncoded
     @POST("/app/changeData")
     fun changeData(

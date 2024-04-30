@@ -59,8 +59,8 @@ class LocationService : Service() {
             notificationManager.createNotificationChannel(notificationChannel)
         }
         val locationRequest: LocationRequest = LocationRequest.create()
-        locationRequest.setInterval(4000)
-        locationRequest.setFastestInterval(2000)
+        locationRequest.setInterval(30000)
+        locationRequest.setFastestInterval(20000)
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION
