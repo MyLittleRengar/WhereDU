@@ -259,13 +259,6 @@ interface ApiService {
     ): Call<String>
 
     @FormUrlEncoded
-    @POST("/app/promiseTouchdown")
-    fun promiseTouchdown(
-        @Field("promiseName") promiseName: String,
-        //@Field("")
-    ): Call<String>
-
-    @FormUrlEncoded
     @POST("/app/location")
     fun location(
         @Field("nickname") nickname: String,
@@ -282,20 +275,21 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/app/memberTouchdown")
     fun memberTouchdown(
+        @Field("promiseName") promiseName: String,
         @Field("nickname") nickname: String
     ): Call<String>
-    /*@FormUrlEncoded
-    @POST("/app/changeData")
-    fun changeData(
-        @Field("ownNum") ownNum: String,
-        @Field("changeType") changeType: Int,
-        @Field("changeDate") changeDate: String,
-        @Field("changeLoc") changeLoc: String,
-        @Field("changePerson") changePerson: String
-    ): Call<String>*/
+    @FormUrlEncoded
+    @POST("/app/addTouchdown")
+    fun addTouchdown(
+        @Field("promiseName") promiseName: String,
+        @Field("nickname") nickname: String
+    ): Call<String>
 
-    /*@FormUrlEncoded
-    @POST("/app/addTravelRecyclerList")
-    fun addTravelRecyclerList(
-        @Field("travelCnt") travelCnt:Int): Call<String>*/
+    @FormUrlEncoded
+    @POST("/app/changeTouchdown")
+    fun changeTouchdown(
+        @Field("promiseName") promiseName: String,
+        @Field("nickname") nickname: String,
+        @Field("touchdown") touchdown: Int
+    ): Call<String>
 }

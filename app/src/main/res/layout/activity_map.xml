@@ -119,26 +119,6 @@
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/buttonStartLocationUpdates"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="start" />
-
-                <Button
-                    android:id="@+id/buttonStopLocationUpdates"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="stop" />
-
-            </LinearLayout>
-
         </FrameLayout>
     </LinearLayout>
 

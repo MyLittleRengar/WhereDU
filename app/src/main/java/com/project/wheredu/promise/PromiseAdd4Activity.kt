@@ -92,6 +92,10 @@ class PromiseAdd4Activity : AppCompatActivity() {
                     try {
                         val result = response.body()!!.toString()
                         if(result == "pass") {
+                            addTouchdown(name, owner)
+                            for(i in member.indices) {
+                                addTouchdown(name, member[i])
+                            }
                             ToastMessage.show(this@PromiseAdd4Activity, "약속이 추가되었습니다")
                             startActivity(Intent(this@PromiseAdd4Activity, PromiseActivity::class.java))
                             ActivityCompat.finishAffinity(this@PromiseAdd4Activity)
@@ -111,7 +115,26 @@ class PromiseAdd4Activity : AppCompatActivity() {
             override fun onFailure(call: Call<String?>, t: Throwable) {
                 Toast.makeText(this@PromiseAdd4Activity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
             }
+        })
+    }
 
+    private fun addTouchdown(promiseName: String, nickname: String) {
+        val callPost = service.addTouchdown(promiseName, nickname)
+        callPost.enqueue(object: Callback<String> {
+            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                if(response.isSuccessful) {
+                    try {}
+                    catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+                else {
+                    Toast.makeText(this@PromiseAdd4Activity, "오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                Toast.makeText(this@PromiseAdd4Activity, "서버 연결에 오류가 발생했습니다", Toast.LENGTH_SHORT).show()
+            }
         })
     }
 }

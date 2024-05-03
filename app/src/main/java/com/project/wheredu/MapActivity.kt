@@ -35,7 +35,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.project.wheredu.recycler.MapMemberItem
 import com.project.wheredu.recycler.MapMemberListAdapter
 import com.project.wheredu.utility.Constants
-import com.project.wheredu.utility.GetAddress
 import com.project.wheredu.utility.LocationService
 import com.project.wheredu.utility.PlaceDistance
 import com.project.wheredu.utility.Service
@@ -45,7 +44,6 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,16 +88,16 @@ class MapActivity : AppCompatActivity() {
     private lateinit var storeNick: String
 
     private val service = Service.getService()
-    private var listItems = arrayListOf<MapMemberItem>()
-    private var mapMemberListAdapter = MapMemberListAdapter(listItems)
+    private var doneListItems = arrayListOf<MapMemberItem>()
+    private var mapDoneMemberListAdapter = MapMemberListAdapter(doneListItems)
+    private var comingListItems = arrayListOf<MapMemberItem>()
+    private var mapComingMemberListAdapter = MapMemberListAdapter(comingListItems)
 
     private lateinit var bottomSheetPromiseInfoBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetFriendInfoBehavior: BottomSheetBehavior<LinearLayout>
     private val friendInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheetFriendInfo) }
     private val promiseInfoBehavior by lazy { findViewById<LinearLayout>(R.id.per_bottom_sheet_PromiseInfo) }
 
-    private lateinit var buttonStartLocationUpdates: Button
-    private lateinit var buttonStopLocationUpdates: Button
     private val requestCodeLocationPermission = 1
 
     private var marker = MapPOIItem()
@@ -130,18 +128,10 @@ class MapActivity : AppCompatActivity() {
         fabPromiseLoc = findViewById(R.id.fabPromiseLoc)
         fabMyLoc = findViewById(R.id.fabMyLoc)
 
-        buttonStartLocationUpdates = findViewById(R.id.buttonStartLocationUpdates)
-        buttonStopLocationUpdates = findViewById(R.id.buttonStopLocationUpdates)
-
-        buttonStartLocationUpdates.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCodeLocationPermission)
-            } else {
-                startLocationService()
-            }
-        }
-        buttonStopLocationUpdates.setOnClickListener {
-            stopLocationService()
+        if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), requestCodeLocationPermission)
+        } else {
+            startLocationService()
         }
 
         returnPromiseData(promiseName)
@@ -254,14 +244,14 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun checkTouchdown(name: String) {
-        val callPost = service.promiseTouchdown(name)
+        val callPost = service.changeTouchdown(promiseName, name, 1)
         callPost.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                 if(response.isSuccessful) {
                     try {
                         val result = response.body()!!.toString()
                         if(result == "pass") {
-                            ToastMessage.show(this@MapActivity, "터치 다운!!")
+                            ToastMessage.show(this@MapActivity, "터치 다운!")
                         }
                     }
                     catch (e: IOException) {
@@ -408,10 +398,17 @@ class MapActivity : AppCompatActivity() {
 
         fabFriendInfo.setOnClickListener {
             with(findViewById<View>(R.id.per_bottom_sheetFriendInfo)) {
-                val rvId = findViewById<RecyclerView>(R.id.map_done_memberRV)
-                rvId.layoutManager = LinearLayoutManager(this@MapActivity, LinearLayoutManager.VERTICAL, false)
-                rvId.adapter = mapMemberListAdapter
+                val doneRv = findViewById<RecyclerView>(R.id.map_done_memberRV)
+                doneRv.layoutManager = LinearLayoutManager(this@MapActivity, LinearLayoutManager.VERTICAL, false)
+                doneRv.adapter = mapDoneMemberListAdapter
+                val comingRv = findViewById<RecyclerView>(R.id.map_coming_memberRV)
+                comingRv.layoutManager = LinearLayoutManager(this@MapActivity, LinearLayoutManager.VERTICAL, false)
+                comingRv.adapter = mapComingMemberListAdapter
                 memberLocation()
+
+                findViewById<Button>(R.id.map_refreshBtn).setOnClickListener {
+                    memberLocation()
+                }
             }
             bottomSheetFriendInfoBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetPromiseInfoBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -483,8 +480,8 @@ class MapActivity : AppCompatActivity() {
                 val latitude = intent.getDoubleExtra("latitude", 0.0)
                 val longitude = intent.getDoubleExtra("longitude", 0.0)
                 handleLocationUpdate(latitude,longitude)
-                val message = GetAddress.getAddress(this@MapActivity, latitude, longitude)
-                Log.v("LOCATION_UPDATE_ADDRESS", message)
+                //val message = GetAddress.getAddress(this@MapActivity, latitude, longitude)
+                //Log.v("LOCATION_UPDATE_ADDRESS", message)
             }
         }
     }
@@ -516,6 +513,8 @@ class MapActivity : AppCompatActivity() {
 
     private fun memberLocation() {
         val memberList = promiseMember.split(", ")
+        comingListItems.clear()
+        doneListItems.clear()
         for(i in memberList.indices) {
             val callPost = service.memberLocation(memberList[i])
             callPost.enqueue(object: Callback<String> {
@@ -523,7 +522,8 @@ class MapActivity : AppCompatActivity() {
                     if(response.isSuccessful) {
                         try {
                             val result = response.body()!!.toString()
-                            memberTouchdownCheck(result, memberList[i], i)
+                            memberTouchdownCheck(memberList[i], i)
+                            selectReplaceData(result, i)
                         }
                         catch (e: IOException) {
                             e.printStackTrace()
@@ -540,14 +540,15 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    private fun memberTouchdownCheck(result: String, nickname: String, cnt: Int) {
-        val callPost = service.memberTouchdown(nickname)
+    private fun memberTouchdownCheck(nickname: String, cnt: Int) {
+        val callPost = service.memberTouchdown(promiseName, nickname)
         callPost.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if(response.isSuccessful) {
                     try {
-                        val nowResult = response.body()!!.toString()
-                        selectReplaceData(result, cnt)
+                        val result = response.body()!!.toString()
+                        Log.e("EEEE", result)
+                        selectTouchdownReplaceData(result, cnt)
                     }
                     catch (e: IOException) {
                         e.printStackTrace()
@@ -560,26 +561,58 @@ class MapActivity : AppCompatActivity() {
         })
     }
 
+    private fun selectTouchdownReplaceData(result: String, cnt: Int) {
+        val jsonArray = JSONArray(result)
+        val jsonObject = jsonArray.getJSONObject(0)
+
+        val touchdownNickname = jsonObject.getString("nickname")
+        val touchdown = jsonObject.getString("touchdown")
+
+        val textSplit = listOf(touchdownNickname, touchdown)
+        initTouchdownRecycle(textSplit, cnt)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun initTouchdownRecycle(data: List<String>, cnt: Int) {
+        Log.e("EEEE", data.toString())
+        if(data.isNotEmpty()) {
+            val mapCharacterDrawables = arrayOf(R.drawable.mapcharacter0, R.drawable.mapcharacter1, R.drawable.mapcharacter2, R.drawable.mapcharacter3, R.drawable.mapcharacter4)
+            if(data[1] == "0") {
+                val item1 = MapMemberItem(nickname = data[0], img = mapCharacterDrawables[cnt])
+                comingListItems.add(item1)
+                mapComingMemberListAdapter.notifyDataSetChanged()
+            }
+            else {
+                val item2 = MapMemberItem(nickname = data[0], img = mapCharacterDrawables[cnt])
+                doneListItems.add(item2)
+                mapDoneMemberListAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
     private fun selectReplaceData(result: String, cnt: Int) {
-        val jsonObject = JSONObject(result)
+        val jsonArray = JSONArray(result)
+        val jsonObject = jsonArray.getJSONObject(0)
 
         val nickname = jsonObject.getString("nickname")
         val longitude = jsonObject.getString("longitude")
         val latitude = jsonObject.getString("latitude")
 
         val textSplit = listOf(nickname, longitude, latitude)
-        initRecycle(textSplit, cnt)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun initRecycle(data: List<String>, cnt: Int) {
-        if(data.isNotEmpty()) {
-            listItems.clear()
-            val mapCharacterDrawables = arrayOf(R.drawable.mapcharacter0, R.drawable.mapcharacter1, R.drawable.mapcharacter2, R.drawable.mapcharacter3, R.drawable.mapcharacter4)
-            val item = MapMemberItem(nickname = data[0], img = mapCharacterDrawables[cnt])
-            listItems.add(item)
-            mapMemberListAdapter.notifyDataSetChanged()
+        val mapCharacterDrawables = arrayOf(R.drawable.mapcharacter0, R.drawable.mapcharacter1, R.drawable.mapcharacter2, R.drawable.mapcharacter3, R.drawable.mapcharacter4)
+        for(poiItem in mapView.poiItems) {
+            if(poiItem.itemName == nickname) {
+                mapView.removePOIItem(poiItem)
+            }
         }
+        val friendMarker = MapPOIItem()
+        friendMarker.apply {
+            itemName = textSplit[0]
+            mapPoint = MapPoint.mapPointWithGeoCoord(textSplit[2].toDouble(), textSplit[1].toDouble())
+            markerType = MapPOIItem.MarkerType.CustomImage
+            customImageResourceId = mapCharacterDrawables[cnt]
+        }
+        mapView.addPOIItem(friendMarker)
     }
 
     private fun registerLocationUpdateReceiver() {
@@ -591,8 +624,13 @@ class MapActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(locationUpdateReceiver)
     }
 
+    override fun onStop() {
+        super.onStop()
+        stopLocationService()
+    }
     override fun onDestroy() {
         super.onDestroy()
         unregisterLocationUpdateReceiver()
+        stopLocationService()
     }
 }
