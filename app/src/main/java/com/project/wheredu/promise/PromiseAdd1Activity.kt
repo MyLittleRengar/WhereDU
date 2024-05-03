@@ -66,7 +66,8 @@ class PromiseAdd1Activity : AppCompatActivity() {
         }
 
         promiseAddDP.setOnDateChangedListener { _, year, month, day ->
-            pickDate = "$year.${month + 1}.$day"
+            val formattedDay = if(day < 10) "0$day" else "$day"
+            pickDate = "$year.${month + 1}.$formattedDay"
         }
 
         promisePromiseTimeTp.setOnTimeChangedListener { _, hour, minute ->

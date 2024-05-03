@@ -346,6 +346,7 @@ class MainActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy.M.dd")
         val given = LocalDate.parse(textSplit[3], formatter)
         val current = LocalDate.now()
+        val difference = ChronoUnit.DAYS.between(current, given)
         if(given == current) {
             val currentTime = LocalTime.now()
             val targetTimeString = textSplit[2]
@@ -361,6 +362,12 @@ class MainActivity : AppCompatActivity() {
             promiseRemainTimeTv.text = resultTime
             promiseLatitude = textSplit[4].toDouble()
             promiseLongitude = textSplit[5].toDouble()
+        }
+        else if(difference >= 2) {
+            promiseTitleTv.text = "하루 이내 약속 없음"
+            promiseRemainTimeTv.visibility = View.GONE
+            promiseLocationTv.visibility = View.GONE
+            mainPromiseEnterBtn.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.gray))
         }
         else {
             val kstZoneId = ZoneId.of("Asia/Seoul")
