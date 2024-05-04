@@ -50,6 +50,7 @@ class Register2Activity : AppCompatActivity() {
         setContentView(R.layout.activity_register2)
         val userID = intent.getStringExtra("userID").toString()
         val userPW = intent.getStringExtra("userPW").toString()
+        val userEmail = intent.getStringExtra("userEmail").toString()
 
         registerNicknameEt = findViewById(R.id.registerNicknameET)
         nicknameCheckedIv = findViewById(R.id.nicknameCheckedIV)
@@ -70,7 +71,7 @@ class Register2Activity : AppCompatActivity() {
             if (nickCheck) {
                 if (userGender != "") {
                     if (userBirth != "") {
-                        val callPost = service.addUser(userID, userPW, userNickname, userGender, userBirth)
+                        val callPost = service.addUser(userID, userPW, userEmail, userNickname, userGender, userBirth)
                         callPost.enqueue(object : Callback<String?> {
                             override fun onResponse(call: Call<String?>, response: Response<String?>) {
                                 if (response.isSuccessful) {

@@ -51,6 +51,7 @@ interface ApiService {
     fun addUser(
         @Field("addId") addId: String,
         @Field("addPw") addPw: String,
+        @Field("addEmail") addEmail: String,
         @Field("addNickname") addNickname: String,
         @Field("addGender") addGender: String,
         @Field("addBirth") addBirth: String

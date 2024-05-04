@@ -13,9 +13,10 @@ import com.project.wheredu.utility.Service
 import retrofit2.*
 import java.io.IOException
 
-class Register1Activity : AppCompatActivity() {
+class   Register1Activity : AppCompatActivity() {
 
     private lateinit var registerIDEt: EditText
+    private lateinit var registerEmailEt: EditText
     private lateinit var registerPWEt: EditText
     private lateinit var registerPWCheckEt: EditText
     private lateinit var registerNicknameCheckBtn: Button
@@ -30,6 +31,7 @@ class Register1Activity : AppCompatActivity() {
         setContentView(R.layout.activity_register1)
 
         registerIDEt = findViewById(R.id.registerIdET)
+        registerEmailEt = findViewById(R.id.registerEmailET)
         registerPWEt = findViewById(R.id.registerPasswordET)
         registerPWCheckEt = findViewById(R.id.registerPasswordCheckET)
         registerNicknameCheckBtn = findViewById(R.id.registerIdCheckedBTN)
@@ -75,27 +77,34 @@ class Register1Activity : AppCompatActivity() {
 
         registerNextBtn.setOnClickListener {
             val idText = registerIDEt.text.toString()
+            val emailText = registerEmailEt.text.toString()
             val registerPwText = registerPWEt.text.toString()
             val registerPwCheckText = registerPWCheckEt.text.toString()
             if(idCheck) {
-                if(registerPwText.isNotBlank()) {
-                    if(registerPwCheckText.isNotBlank()) {
-                        if(registerPwText == registerPwCheckText) {
-                            val intent = Intent(this@Register1Activity, Register2Activity::class.java)
-                            intent.putExtra("userID", idText)
-                            intent.putExtra("userPW", registerPwText)
-                            startActivity(intent)
+                if(emailText.isNotBlank()) {
+                    if(registerPwText.isNotBlank()) {
+                        if(registerPwCheckText.isNotBlank()) {
+                            if(registerPwText == registerPwCheckText) {
+                                val intent = Intent(this@Register1Activity, Register2Activity::class.java)
+                                intent.putExtra("userID", idText)
+                                intent.putExtra("userEmail", emailText)
+                                intent.putExtra("userPW", registerPwText)
+                                startActivity(intent)
+                            }
+                            else{
+                                Toast.makeText(this@Register1Activity, "비밀번호가 서로 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                        else{
-                            Toast.makeText(this@Register1Activity, "비밀번호가 서로 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+                        else {
+                            Toast.makeText(this@Register1Activity, "비밀번호 확인을 입력해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    else {
-                        Toast.makeText(this@Register1Activity, "비밀번호 확인을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    else{
+                        Toast.makeText(this@Register1Activity, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
-                else{
-                    Toast.makeText(this@Register1Activity, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                else {
+                    Toast.makeText(this@Register1Activity, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
             else {
