@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="account">
+        <item>선택하세요</item>
+        <item>농협</item>
+        <item>국민은행</item>
+        <item>카카오뱅크</item>
+        <item>대구은행</item>
+    </string-array>
+</resources>

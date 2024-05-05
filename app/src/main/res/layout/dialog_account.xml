@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account_layout"
+    android:orientation="vertical"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="15dp"
+    android:background="@drawable/corner_radius">
+
+    <TextView
+        android:id="@+id/dialog_AccountTitleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nanum_bold"
+        android:text="계좌번호"
+        android:textColor="@color/DUGreen"
+        android:textSize="17sp"
+        tools:ignore="HardcodedText,TextContrastCheck" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_border"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/bankSp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2.1"
+            android:backgroundTint="@color/DUGreen"
+            android:fontFamily="@font/nanum_bold"
+            android:minHeight="48dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/accountEt"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="10dp"
+            android:autofillHints=""
+            android:backgroundTint="@color/DUGreen"
+            android:ems="10"
+            android:fontFamily="@font/nanum_bold"
+            android:hint="계좌번호 (숫자만 입력)"
+            android:inputType="number"
+            android:minHeight="48dp"
+            android:textCursorDrawable="@drawable/edittextcur"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText,TextSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dialog_ok_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/DUGreen"
+        android:fontFamily="@font/nanum_bold"
+        android:text="확인"
+        tools:ignore="HardcodedText,TextContrastCheck" />
+</LinearLayout>

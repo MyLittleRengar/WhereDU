@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,7 @@ import java.io.IOException
 class PastListActivity : AppCompatActivity() {
 
     private lateinit var pastListRv: RecyclerView
+    private lateinit var pastBackIv: ImageView
     private lateinit var pastBottomNav: BottomNavigationView
 
     private var listItems = arrayListOf<PastPromiseItem>()
@@ -44,11 +46,15 @@ class PastListActivity : AppCompatActivity() {
         returnPastPromise(storeNick)
 
         pastListRv = findViewById(R.id.pastListRv)
+        pastBackIv = findViewById(R.id.pastBackIv)
         pastBottomNav = findViewById(R.id.past_bottomNav)
 
         pastListRv.layoutManager = LinearLayoutManager(this@PastListActivity, LinearLayoutManager.VERTICAL, false)
         pastListRv.adapter = pastPromiseListAdapter
 
+        pastBackIv.setOnClickListener {
+            finish()
+        }
 
         pastBottomNav.setOnItemSelectedListener { item ->
             when(item.itemId) {

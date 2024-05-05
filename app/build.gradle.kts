@@ -23,6 +23,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "URL_WEATHER", "${properties["url.weather"]}")
+        buildConfigField("String", "API_KEY", "${properties["api.key"]}")
         buildConfigField("String", "SERVER_IP", "${properties["api.serverip"]}")
         buildConfigField("String", "KAKAOAPI", "${properties["api.kakao_api"]}")
         buildConfigField("String", "KAKAOURL", "${properties["api.kakao_url"]}")
@@ -49,6 +51,7 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        dataBinding = true
     }
 }
 

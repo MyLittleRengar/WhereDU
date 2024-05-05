@@ -257,7 +257,7 @@
                             android:layout_height="match_parent">
 
                             <Button
-                                android:id="@+id/button"
+                                android:id="@+id/mainDutchPayBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/round_btn"
@@ -265,7 +265,7 @@
                                 tools:ignore="ButtonStyle" />
 
                             <Button
-                                android:id="@+id/button2"
+                                android:id="@+id/mainWeatherBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/round_btn"
@@ -275,7 +275,7 @@
                                 tools:ignore="ButtonStyle" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/mainRandomPickBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/round_btn"

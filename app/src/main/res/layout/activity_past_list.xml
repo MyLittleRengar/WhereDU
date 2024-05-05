@@ -32,7 +32,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/pastBackIv"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="end|center"

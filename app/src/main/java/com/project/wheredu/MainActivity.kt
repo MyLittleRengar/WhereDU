@@ -61,6 +61,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nearStoreInfoTv: TextView
     private lateinit var recommendCafeInfoTv: TextView
 
+    private lateinit var mainDutchPayBtn: Button
+    private lateinit var mainWeatherBtn: Button
+    private lateinit var mainRandomPickBtn: Button
+
     private lateinit var mainBottomNav: BottomNavigationView
 
     private lateinit var preferences: SharedPreferences
@@ -105,6 +109,10 @@ class MainActivity : AppCompatActivity() {
         recommendCafeRv = findViewById(R.id.recommendCafeRv)
         nearStoreInfoTv = findViewById(R.id.nearStoreInfoTV)
         recommendCafeInfoTv = findViewById(R.id.recommendCafeInfoTV)
+
+        mainDutchPayBtn = findViewById(R.id.mainDutchPayBtn)
+        mainWeatherBtn = findViewById(R.id.mainWeatherBtn)
+        mainRandomPickBtn = findViewById(R.id.mainRandomPickBtn)
 
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         userNewLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
@@ -163,12 +171,21 @@ class MainActivity : AppCompatActivity() {
 
         pastListIv.setOnClickListener {
             startActivity(Intent(this@MainActivity, PastListActivity::class.java))
-            finish()
         }
 
         promiseAddIv.setOnClickListener {
             startActivity(Intent(this@MainActivity, PromiseAdd1Activity::class.java))
             finish()
+        }
+
+        mainDutchPayBtn.setOnClickListener {
+            startActivity(Intent(this@MainActivity, DutchPayActivity::class.java))
+        }
+        mainWeatherBtn.setOnClickListener {
+            startActivity(Intent(this@MainActivity, WeatherActivity::class.java))
+        }
+        mainRandomPickBtn.setOnClickListener {
+            startActivity(Intent(this@MainActivity, RandomPickActivity::class.java))
         }
 
         mainBottomNav.setOnItemSelectedListener { item ->

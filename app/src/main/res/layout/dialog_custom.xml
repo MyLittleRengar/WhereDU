@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingHorizontal="40dp"
+    android:paddingVertical="15dp"
+    android:background="@drawable/corner_radius">
+
+    <TextView
+        android:id="@+id/dialog_titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nanum_bold"
+        android:text="총 인원"
+        android:textColor="@color/DUGreen"
+        android:textSize="17sp"
+        tools:ignore="HardcodedText,TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/dialog_countTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/nanum_bold"
+        android:text="2명"
+        android:textColor="@color/DUGreen"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText,TextContrastCheck" />
+
+    <SeekBar
+        android:id="@+id/dialog_Sb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="5"
+        android:progress="2"
+        android:min="2"
+        android:theme="@style/SeekBarColor"/>
+
+    <Button
+        android:id="@+id/dialog_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/DUGreen"
+        android:fontFamily="@font/nanum_bold"
+        android:text="확인"
+        tools:ignore="HardcodedText,TextContrastCheck" />
+</LinearLayout>
