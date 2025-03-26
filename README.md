@@ -30,6 +30,7 @@
 * Android Studio API 34
 * Kotlin
 * WhereDU Server
+* Kakaomap Maps API
 * 공공데이터 API(기상청_단기예보 ((구)_동네예보) 조회서비스)
 
 
